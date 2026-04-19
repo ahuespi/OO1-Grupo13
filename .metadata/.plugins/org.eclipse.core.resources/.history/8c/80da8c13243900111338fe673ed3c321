@@ -1,0 +1,51 @@
+package test;
+
+import model.Paciente;
+import model.Doctor;
+
+public class TestConsultorio {
+	public static void main(String[] args) {
+		Paciente patient1 = new Paciente("Amir", "Huespi", 1.62f, 93);
+		Paciente patient2 = new Paciente("Juan Roman", "Riquelme", 1.80f, 84);
+		Paciente patient3 = new Paciente("Raul", "Cascini", 2.12f, 70);
+		Paciente patient4 = new Paciente("Mauricio", "Serna", 1.75f, 90);
+		Doctor doctor1 = new Doctor("Daniel", "Lopez", "Nutricionista");
+
+		System.out.println("Pacientes: ");
+		System.out.println(
+				patient1.getFullName()+" | "+
+						patient2.getFullName()+" | "+
+						patient3.getFullName()+" | "+
+						patient4.getFullName()
+				);
+
+		// ---------------------------
+		System.out.println();
+		System.out.println("Visita 1: ");
+		System.out.println("Medico: " + doctor1.getFullName());
+		System.out.println("Paciente: " + patient1.getFullName() + ". | IMC: "+ doctor1.calculateIMC(patient1));
+		System.out.println("Paciente: " + patient2.getFullName() + ". | IMC: "+ doctor1.calculateIMC(patient2));
+
+		// ---------------------------
+		// Modificación del peso y la altura
+		patient1.setHeight(2.0f);
+		patient1.setWeight(98);
+		patient2.setHeight(1.50f);
+		patient2.setWeight(91);
+		// ---------------------------
+
+		System.out.println();
+		System.out.println("Visita 2: ");
+		System.out.println("Medico: " + doctor1.getFullName());
+		System.out.println("Paciente: " + patient1.getFullName() + ". | IMC: "+ doctor1.calculateIMC(patient1));
+		System.out.println("Paciente: " + patient2.getFullName() + ". | IMC: "+ doctor1.calculateIMC(patient2));
+
+		System.out.println();
+		System.out.println(doctor1.toString());
+		System.out.println();
+		System.out.println(patient1.toString());
+		System.out.println();
+		System.out.println(patient2.toString());
+	}
+
+}

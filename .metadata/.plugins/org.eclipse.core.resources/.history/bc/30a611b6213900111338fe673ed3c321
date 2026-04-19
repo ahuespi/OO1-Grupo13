@@ -1,0 +1,57 @@
+package model;
+
+import java.util.Objects;
+
+public class Estudiante {
+	private String name;
+	private String lastName;
+	private String dni;
+	private String carrera;
+	
+	
+
+	@Override
+	public String toString() {
+		return "Estudiante [name=" + name + ", lastName=" + lastName + ", dni=" + dni + ", carrera=" + carrera + "]";
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(carrera, dni, lastName, name);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Estudiante other = (Estudiante) obj;
+		return Objects.equals(carrera, other.carrera) && Objects.equals(dni, other.dni)
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(name, other.name);
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getDni() {
+		return dni;
+	}
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+	public String getCarrera() {
+		return carrera;
+	}
+	public void setCarrera(String carrera) {
+		this.carrera = carrera;
+	}
+}

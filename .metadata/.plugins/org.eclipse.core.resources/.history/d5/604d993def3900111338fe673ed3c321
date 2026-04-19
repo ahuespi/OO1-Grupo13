@@ -1,0 +1,16 @@
+package test;
+
+import model.Estudiante;
+
+public class UniTest {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Estudiante A1 = new Estudiante("Amir", "Huespi", "37360978", "Lic Sistemas");
+		Estudiante A2 = new Estudiante("Amir", "Huespi", "37360978", "Lic Sistemas");
+	
+		System.out.println(A1.equals(A1));
+	}
+
+}
