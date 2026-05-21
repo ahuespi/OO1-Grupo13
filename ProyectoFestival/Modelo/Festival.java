@@ -14,7 +14,7 @@ public class Festival {
     private double costoMontaje;
     private double plusElectricidad;
     private double sueldoBase;
-    private List<unidadDeVenta> unidades;
+    private List<UnidadDeVenta> unidades;
 
     public Festival() {
         this.id = contadorId++;
@@ -104,19 +104,19 @@ public class Festival {
         this.sueldoBase = sueldoBase;
     }
 
-    public List<unidadDeVenta> getUnidades() {
+    public List<UnidadDeVenta> getUnidades() {
         return unidades;
     }
 
-    public void setUnidades(List<unidadDeVenta> unidades) {
+    public void setUnidades(List<UnidadDeVenta> unidades) {
         this.unidades = unidades;
     }
 
-    public void agregarUnidad(unidadDeVenta u) {
+    public void agregarUnidad(UnidadDeVenta u) {
         this.unidades.add(u);
     }
 
-    public void eliminarUnidad(unidadDeVenta u) {
+    public void eliminarUnidad(UnidadDeVenta u) {
         this.unidades.remove(u);
     }
 

@@ -1,30 +1,33 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class unidadDeVenta {
+public class UnidadDeVenta {
     private int id;
     private int codigo;
     private String nombreComercial;
     private Personal persona;
     private int superficieMetroCuadrado;
     private double sueldoBase;
-    List<Personal> lstPersonal;
-    List<Plato> lstPlatos;
+    private List<Personal> lstPersonal;
+    private List<Plato> lstPlatos;
 
-    public unidadDeVenta() {
+    public UnidadDeVenta() {
+        this.lstPersonal = new ArrayList<>();
+        this.lstPlatos = new ArrayList<>();
     }
 
-    public unidadDeVenta(int id, int codigo, String nombreComercial, Personal persona,
+    public UnidadDeVenta(int id, int codigo, String nombreComercial, Personal persona,
                          int superficieMetroCuadrado, double sueldoBase,
                          List<Personal> lstPersonal, List<Plato> lstPlatos) {
         this.id = id;
         this.codigo = codigo;
         this.nombreComercial = nombreComercial;
         this.persona = persona;
-        this.superficeMetroCuadrado = superficeMetroCuadrado;
+        this.superficieMetroCuadrado = superficieMetroCuadrado;
         this.sueldoBase = sueldoBase;
-        this.lstPersonal = new ArrayList<Personal>();
-        this.lstPlatos = new ArrayList<Plato>();
+        this.lstPersonal = lstPersonal != null ? new ArrayList<>(lstPersonal) : new ArrayList<>();
+        this.lstPlatos = lstPlatos != null ? new ArrayList<>(lstPlatos) : new ArrayList<>();
     }
 
     public int getId() {
@@ -63,8 +66,8 @@ public class unidadDeVenta {
         return superficieMetroCuadrado;
     }
 
-    public void setSuperficieMetroCuadrado(int superficeMetroCuadrado) {
-        this.superficieMetroCuadrado = superficeMetroCuadrado;
+    public void setSuperficieMetroCuadrado(int superficieMetroCuadrado) {
+        this.superficieMetroCuadrado = superficieMetroCuadrado;
     }
 
     public double getSueldoBase() {
@@ -105,9 +108,16 @@ public class unidadDeVenta {
                 ')';
     }
 
-    
-    //equals
-    public boolean equals(unidadDeVenta uv){
-        return uv.getId() == this.id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UnidadDeVenta)) return false;
+        UnidadDeVenta that = (UnidadDeVenta) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
