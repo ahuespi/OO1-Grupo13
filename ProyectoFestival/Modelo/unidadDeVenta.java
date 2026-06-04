@@ -2,47 +2,82 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UnidadDeVenta {
+public abstract class UnidadDeVenta {
+
     private int id;
-    private int codigo;
+    private String codigo;
     private String nombreComercial;
-    private Personal persona;
+    private Personal responsable;
     private int superficieMetroCuadrado;
-    private double sueldoBase;
+
     private List<Personal> lstPersonal;
     private List<Plato> lstPlatos;
 
     public UnidadDeVenta() {
-        this.lstPersonal = new ArrayList<>();
-        this.lstPlatos = new ArrayList<>();
+        this.lstPersonal = new ArrayList<Personal>();
+        this.lstPlatos = new ArrayList<Plato>();
     }
 
-    public UnidadDeVenta(int id, int codigo, String nombreComercial, Personal persona,
-                         int superficieMetroCuadrado, double sueldoBase,
-                         List<Personal> lstPersonal, List<Plato> lstPlatos) {
+    public UnidadDeVenta(int id, String codigo, String nombreComercial, Personal responsable,
+                         int superficieMetroCuadrado) throws Exception {
+        this();
         this.id = id;
-        this.codigo = codigo;
+        this.setCodigo(codigo);
         this.nombreComercial = nombreComercial;
-        this.persona = persona;
+        this.responsable = responsable;
         this.superficieMetroCuadrado = superficieMetroCuadrado;
-        this.sueldoBase = sueldoBase;
-        this.lstPersonal = lstPersonal != null ? new ArrayList<>(lstPersonal) : new ArrayList<>();
-        this.lstPlatos = lstPlatos != null ? new ArrayList<>(lstPlatos) : new ArrayList<>();
+    }
+
+    public abstract double calcularCanon();
+
+    public boolean agregarPersonal(Personal personal) {
+        return lstPersonal.add(personal);
+    }
+
+    public boolean agregarPlato(Plato plato) {
+        return lstPlatos.add(plato);
+    }
+
+    public Personal traerPersonal(long dni) {
+        Personal encontrado = null;
+        int i = 0;
+
+        while (i < lstPersonal.size() && encontrado == null) {
+            if (lstPersonal.get(i).getDni() == dni) {
+                encontrado = lstPersonal.get(i);
+            }
+            i++;
+        }
+
+        return encontrado;
+    }
+
+    public Plato traerPlato(String nombre) {
+        Plato encontrado = null;
+        int i = 0;
+
+        while (i < lstPlatos.size() && encontrado == null) {
+            if (lstPlatos.get(i).getNombre().equalsIgnoreCase(nombre)) {
+                encontrado = lstPlatos.get(i);
+            }
+            i++;
+        }
+
+        return encontrado;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) throws Exception {
+        if (codigo == null || codigo.length() != 10) {
+            throw new Exception("Error: el código de la unidad debe tener exactamente 10 caracteres");
+        }
         this.codigo = codigo;
     }
 
@@ -54,12 +89,12 @@ public class UnidadDeVenta {
         this.nombreComercial = nombreComercial;
     }
 
-    public Personal getPersona() {
-        return persona;
+    public Personal getResponsable() {
+        return responsable;
     }
 
-    public void setPersona(Personal persona) {
-        this.persona = persona;
+    public void setResponsable(Personal responsable) {
+        this.responsable = responsable;
     }
 
     public int getSuperficieMetroCuadrado() {
@@ -68,14 +103,6 @@ public class UnidadDeVenta {
 
     public void setSuperficieMetroCuadrado(int superficieMetroCuadrado) {
         this.superficieMetroCuadrado = superficieMetroCuadrado;
-    }
-
-    public double getSueldoBase() {
-        return sueldoBase;
-    }
-
-    public void setSueldoBase(double sueldoBase) {
-        this.sueldoBase = sueldoBase;
     }
 
     public List<Personal> getLstPersonal() {
@@ -96,28 +123,28 @@ public class UnidadDeVenta {
 
     @Override
     public String toString() {
-        return "unidadDeVenta(" +
-                "id=" + id +
+        return "UnidadDeVenta [id=" + id +
                 ", codigo=" + codigo +
-                ", nombreComercial='" + nombreComercial + '\'' +
-                ", persona=" + persona +
+                ", nombreComercial=" + nombreComercial +
+                ", responsable=" + responsable +
                 ", superficieMetroCuadrado=" + superficieMetroCuadrado +
-                ", sueldoBase=" + sueldoBase +
-                ", lstPersonal=" + lstPersonal +
-                ", lstPlatos=" + lstPlatos +
-                ')';
+                "]";
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UnidadDeVenta)) return false;
-        UnidadDeVenta that = (UnidadDeVenta) o;
-        return id == that.id;
+    public boolean equals(Object obj) {
+        boolean resultado = false;
+
+        if (obj != null && obj instanceof UnidadDeVenta) {
+            UnidadDeVenta otraUnidad = (UnidadDeVenta) obj;
+            resultado = this.codigo.equals(otraUnidad.getCodigo());
+        }
+
+        return resultado;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(codigo);
     }
 }

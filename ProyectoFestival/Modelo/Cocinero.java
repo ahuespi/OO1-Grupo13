@@ -1,18 +1,21 @@
 import java.time.LocalDate;
 
-/**
- * Representa un cocinero (personal) del festival.
- */
 public class Cocinero extends Personal {
+
     private String especialidad;
-    private int experienciaAnios;
+    private double plusCategoria;
 
     public Cocinero(int id, String nombre, String apellido, long dni,
                     LocalDate fechaNacimiento, LocalDate fechaIngreso,
-                    String especialidad, int experienciaAnios) {
+                    String especialidad, double plusCategoria) throws Exception {
         super(id, nombre, apellido, dni, fechaNacimiento, fechaIngreso);
         this.especialidad = especialidad;
-        this.experienciaAnios = experienciaAnios;
+        this.plusCategoria = plusCategoria;
+    }
+
+    @Override
+    public double calcularSueldo() {
+        return SUELDO_BASE + plusCategoria;
     }
 
     public String getEspecialidad() {
@@ -23,11 +26,19 @@ public class Cocinero extends Personal {
         this.especialidad = especialidad;
     }
 
-    public int getExperienciaAnios() {
-        return experienciaAnios;
+    public double getPlusCategoria() {
+        return plusCategoria;
     }
 
-    public void setExperienciaAnios(int experienciaAnios) {
-        this.experienciaAnios = experienciaAnios;
+    public void setPlusCategoria(double plusCategoria) {
+        this.plusCategoria = plusCategoria;
+    }
+
+    @Override
+    public String toString() {
+        return "Cocinero [" + super.toString() +
+                ", especialidad=" + especialidad +
+                ", plusCategoria=" + plusCategoria +
+                "]";
     }
 }

@@ -1,33 +1,39 @@
+
 import java.time.LocalDate;
 
-/**
- * Representa un cajero (personal) del festival.
- */
 public class Cajero extends Personal {
-    private int cajaId;
+
     private String turno;
 
     public Cajero(int id, String nombre, String apellido, long dni,
                   LocalDate fechaNacimiento, LocalDate fechaIngreso,
-                  int cajaId, String turno) {
+                  String turno) throws Exception {
         super(id, nombre, apellido, dni, fechaNacimiento, fechaIngreso);
-        this.cajaId = cajaId;
-        this.turno = turno;
+        this.setTurno(turno);
     }
 
-    public int getCajaId() {
-        return cajaId;
-    }
-
-    public void setCajaId(int cajaId) {
-        this.cajaId = cajaId;
+    @Override
+    public double calcularSueldo() {
+        return SUELDO_BASE + calcularAntiguedad() * VALOR_ANIO_ANTIGUEDAD;
     }
 
     public String getTurno() {
         return turno;
     }
 
-    public void setTurno(String turno) {
+    public void setTurno(String turno) throws Exception {
+        if (turno == null ||
+                (!turno.equalsIgnoreCase("mañana") && !turno.equalsIgnoreCase("noche"))) {
+            throw new Exception("Error: el turno debe ser mañana o noche");
+        }
+
         this.turno = turno;
+    }
+
+    @Override
+    public String toString() {
+        return "Cajero [" + super.toString() +
+                ", turno=" + turno +
+                "]";
     }
 }

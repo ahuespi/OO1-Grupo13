@@ -1,37 +1,52 @@
-/**
- * Representa una unidad móvil de venta (FoodTruck) que extiende `UnidadDeVenta`.
- */
 public class FoodTruck extends UnidadDeVenta {
-    private String licencia;
-    private double capacidadGas;
 
-    public FoodTruck(int id, int codigo, String nombreComercial, Personal persona,
-                     int superficieMetroCuadrado, double sueldoBase,
-                     String licencia, double capacidadGas) {
+    private String patente;
+    private boolean requiereConexionElectrica;
+
+    public FoodTruck() {
         super();
-        setId(id);
-        setCodigo(codigo);
-        setNombreComercial(nombreComercial);
-        setPersona(persona);
-        setSuperficieMetroCuadrado(superficieMetroCuadrado);
-        setSueldoBase(sueldoBase);
-        this.licencia = licencia;
-        this.capacidadGas = capacidadGas;
     }
 
-    public String getLicencia() {
-        return licencia;
+    public FoodTruck(int id, String codigo, String nombreComercial, Personal responsable,
+                     int superficieMetroCuadrado, String patente,
+                     boolean requiereConexionElectrica) throws Exception {
+        super(id, codigo, nombreComercial, responsable, superficieMetroCuadrado);
+        this.patente = patente;
+        this.requiereConexionElectrica = requiereConexionElectrica;
     }
 
-    public void setLicencia(String licencia) {
-        this.licencia = licencia;
+    @Override
+    public double calcularCanon() {
+        double canon = getSuperficieMetroCuadrado() * 500;
+
+        if (requiereConexionElectrica) {
+            canon += 2000;
+        }
+
+        return canon;
     }
 
-    public double getCapacidadGas() {
-        return capacidadGas;
+    public String getPatente() {
+        return patente;
     }
 
-    public void setCapacidadGas(double capacidadGas) {
-        this.capacidadGas = capacidadGas;
+    public void setPatente(String patente) {
+        this.patente = patente;
+    }
+
+    public boolean isRequiereConexionElectrica() {
+        return requiereConexionElectrica;
+    }
+
+    public void setRequiereConexionElectrica(boolean requiereConexionElectrica) {
+        this.requiereConexionElectrica = requiereConexionElectrica;
+    }
+
+    @Override
+    public String toString() {
+        return "FoodTruck [" + super.toString() +
+                ", patente=" + patente +
+                ", requiereConexionElectrica=" + requiereConexionElectrica +
+                "]";
     }
 }

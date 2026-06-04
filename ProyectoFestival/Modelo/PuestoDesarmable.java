@@ -1,37 +1,46 @@
-/**
- * Representa un puesto desarmable que extiende `UnidadDeVenta`.
- */
 public class PuestoDesarmable extends UnidadDeVenta {
-    private int tiempoArmadoMinutos;
-    private boolean tieneParedes;
 
-    public PuestoDesarmable(int id, int codigo, String nombreComercial, Personal persona,
-                            int superficieMetroCuadrado, double sueldoBase,
-                            int tiempoArmadoMinutos, boolean tieneParedes) {
+    private int cantidadCarpas;
+    private int tiempoMontajeMinutos;
+
+    public PuestoDesarmable() {
         super();
-        setId(id);
-        setCodigo(codigo);
-        setNombreComercial(nombreComercial);
-        setPersona(persona);
-        setSuperficieMetroCuadrado(superficieMetroCuadrado);
-        setSueldoBase(sueldoBase);
-        this.tiempoArmadoMinutos = tiempoArmadoMinutos;
-        this.tieneParedes = tieneParedes;
     }
 
-    public int getTiempoArmadoMinutos() {
-        return tiempoArmadoMinutos;
+    public PuestoDesarmable(int id, String codigo, String nombreComercial, Personal responsable,
+                            int superficieMetroCuadrado, int cantidadCarpas,
+                            int tiempoMontajeMinutos) throws Exception {
+        super(id, codigo, nombreComercial, responsable, superficieMetroCuadrado);
+        this.cantidadCarpas = cantidadCarpas;
+        this.tiempoMontajeMinutos = tiempoMontajeMinutos;
     }
 
-    public void setTiempoArmadoMinutos(int tiempoArmadoMinutos) {
-        this.tiempoArmadoMinutos = tiempoArmadoMinutos;
+    @Override
+    public double calcularCanon() {
+        return (getSuperficieMetroCuadrado() * 500) - (tiempoMontajeMinutos * 10);
     }
 
-    public boolean isTieneParedes() {
-        return tieneParedes;
+    public int getCantidadCarpas() {
+        return cantidadCarpas;
     }
 
-    public void setTieneParedes(boolean tieneParedes) {
-        this.tieneParedes = tieneParedes;
+    public void setCantidadCarpas(int cantidadCarpas) {
+        this.cantidadCarpas = cantidadCarpas;
+    }
+
+    public int getTiempoMontajeMinutos() {
+        return tiempoMontajeMinutos;
+    }
+
+    public void setTiempoMontajeMinutos(int tiempoMontajeMinutos) {
+        this.tiempoMontajeMinutos = tiempoMontajeMinutos;
+    }
+
+    @Override
+    public String toString() {
+        return "PuestoDesarmable [" + super.toString() +
+                ", cantidadCarpas=" + cantidadCarpas +
+                ", tiempoMontajeMinutos=" + tiempoMontajeMinutos +
+                "]";
     }
 }
