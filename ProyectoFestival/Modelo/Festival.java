@@ -14,10 +14,12 @@ public class Festival {
     private double costoMontaje;
     private double plusElectricidad;
     private double sueldoBase;
+    private double precio;
     private List<UnidadDeVenta> unidades;
 
     public Festival() {
         this.id = contadorId++;
+        this.precio = 0.0;
         this.unidades = new ArrayList<>();
     }
 
@@ -104,6 +106,14 @@ public class Festival {
         this.sueldoBase = sueldoBase;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     public List<UnidadDeVenta> getUnidades() {
         return unidades;
     }
@@ -111,6 +121,8 @@ public class Festival {
     public void setUnidades(List<UnidadDeVenta> unidades) {
         this.unidades = unidades;
     }
+
+    
 
     public void agregarUnidad(UnidadDeVenta u) {
         this.unidades.add(u);
