@@ -143,6 +143,56 @@ public class MainTest {
             System.out.println("Error al calcular haberes: " + e.getMessage());
         }
 
+        // =========================================================
+        // CASO DE USO 5: REGISTRO DE PEDIDO VALIDADO Y AGREGADO DE ITEMS
+        // =========================================================
+
+        System.out.println("\n=== REGISTRO DE PEDIDO VALIDADO ===");
+        try {
+            // 1. Registramos el pedido vacío (solo con sus datos principales)
+            sistema.agregarPedido(
+                    LocalDate.now(),
+                    "Festival Verano 2025",
+                    "FT12345678"
+            );
+            System.out.println("Pedido registrado correctamente con Festival y Unidad válidos.");
+            
+            // 2. Traemos el pedido recién creado (el ID 1 por ser el primero)
+            Pedido pedido = sistema.traerPedido(1);
+            if (pedido != null) {
+                // Creamos un plato de ejemplo para agregar al pedido
+                Plato hamburguesa = new Plato();
+                hamburguesa.setNombre("Hamburguesa Doble");
+                hamburguesa.setPrecio(5000);
+                hamburguesa.setCosto(2000);
+                
+                // 3. Agregamos el plato al pedido usando el método de la clase Pedido
+                pedido.agregarPlato(hamburguesa, 2);
+                System.out.println("Se agregaron 2 Hamburguesa Doble al pedido ID " + pedido.getId());
+                System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
+            }
+            
+            // Error esperado: Festival inexistente
+            sistema.agregarPedido(
+                    LocalDate.now(),
+                    "Festival Inexistente 2099",
+                    "FT12345678"
+            );
+        } catch (Exception e) {
+            System.out.println("Error esperado (Festival inexistente): " + e.getMessage());
+        }
+        
+        try {
+            // Error esperado: Unidad inexistente
+            sistema.agregarPedido(
+                    LocalDate.now(),
+                    "Festival Verano 2025",
+                    "INVENTADO1"
+            );
+        } catch (Exception e) {
+            System.out.println("Error esperado (Unidad inexistente): " + e.getMessage());
+        }
+
         System.out.println("\n=== BAJAS: ELIMINAR UNIDAD ===");
         try {
             sistema.eliminarUnidad("PD12345678");
@@ -180,6 +230,7 @@ public class MainTest {
         System.out.println("Festivales: " + sistema.getLstFestivales().size());
         System.out.println("Unidades:   " + sistema.getLstUnidades().size());
         System.out.println("Personal:   " + sistema.getLstPersonal().size());
+        System.out.println("Pedidos:    " + sistema.getLstPedidos().size());
         
         System.out.println("\n### FILTRAR PERSONAL POR EDAD###");
         System.out.println(sistema.filtroPersonalPorEdad(LocalDate.of(1990, 1, 1), LocalDate.of(1991, 12, 31)));

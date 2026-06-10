@@ -66,6 +66,14 @@ public class Pedido {
         this.items = items;
     }
 
+    public boolean agregarItem(ItemPlatoPedido item) {
+        return this.items.add(item);
+    }
+
+    public boolean eliminarItem(ItemPlatoPedido item) {
+        return this.items.remove(item);
+    }
+
     /**
      * Agrega un plato al pedido creando internamente el ItemPlatoPedido.
      * Mantener la creación del item dentro de la clase favorece la cohesión

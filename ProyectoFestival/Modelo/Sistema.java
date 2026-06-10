@@ -25,9 +25,7 @@ public class Sistema {
                                    double costoSuperficie, double costoMontaje,
                                    double plusElectricidad, double sueldoBase) throws Exception {
 
-        Festival festival = traerFestival(nombre);
-
-        if (festival != null) {
+        if (traerFestival(nombre) != null) {
             throw new Exception("Error: ya existe un festival con ese nombre");
         }
 
@@ -39,9 +37,7 @@ public class Sistema {
                                     int superficieMetroCuadrado, String patente,
                                     boolean requiereConexionElectrica) throws Exception {
 
-        UnidadDeVenta unidad = traerUnidad(codigo);
-
-        if (unidad != null) {
+        if (traerUnidad(codigo) != null) {
             throw new Exception("Error: ya existe una unidad con ese código");
         }
 
@@ -55,9 +51,7 @@ public class Sistema {
                                            int superficieMetroCuadrado, int cantidadCarpas,
                                            int tiempoMontajeMinutos) throws Exception {
 
-        UnidadDeVenta unidad = traerUnidad(codigo);
-
-        if (unidad != null) {
+        if (traerUnidad(codigo) != null) {
             throw new Exception("Error: ya existe una unidad con ese código");
         }
 
@@ -72,9 +66,7 @@ public class Sistema {
                                    java.time.LocalDate fechaIngreso,
                                    String especialidad, double plusCategoria) throws Exception {
 
-        Personal personal = traerPersonal(dni);
-
-        if (personal != null) {
+        if (traerPersonal(dni) != null) {
             throw new Exception("Error: ya existe personal con ese DNI");
         }
 
@@ -89,9 +81,7 @@ public class Sistema {
                                  java.time.LocalDate fechaIngreso,
                                  String turno) throws Exception {
 
-        Personal personal = traerPersonal(dni);
-
-        if (personal != null) {
+        if (traerPersonal(dni) != null) {
             throw new Exception("Error: ya existe personal con ese DNI");
         }
 
@@ -153,12 +143,16 @@ public class Sistema {
         return encontrado;
     }
 
-    public UnidadDeVenta traerUnidad(String codigo) {
+    public UnidadDeVenta traerUnidad(String codigo) throws Exception {
         UnidadDeVenta encontrado = null;
         int i = 0;
+        
+        // Creamos un objeto temporal para usar el método equals
+        FoodTruck aBuscar = new FoodTruck();
+        aBuscar.setCodigo(codigo);
 
         while (i < lstUnidades.size() && encontrado == null) {
-            if (lstUnidades.get(i).getCodigo().equalsIgnoreCase(codigo)) {
+            if (lstUnidades.get(i).equals(aBuscar)) {
                 encontrado = lstUnidades.get(i);
             }
             i++;
@@ -170,15 +164,52 @@ public class Sistema {
     public Festival traerFestival(String nombre) {
         Festival encontrado = null;
         int i = 0;
+        
+        // Creamos un objeto temporal para usar el método equals
+        Festival aBuscar = new Festival();
+        aBuscar.setNombre(nombre);
 
         while (i < lstFestivales.size() && encontrado == null) {
-            if (lstFestivales.get(i).getNombre().equalsIgnoreCase(nombre)) {
+            if (lstFestivales.get(i).equals(aBuscar)) {
                 encontrado = lstFestivales.get(i);
             }
             i++;
         }
 
         return encontrado;
+    }
+
+    public Pedido traerPedido(int id) {
+        Pedido encontrado = null;
+        int i = 0;
+
+        while (i < lstPedidos.size() && encontrado == null) {
+            if (lstPedidos.get(i).getId() == id) {
+                encontrado = lstPedidos.get(i);
+            }
+            i++;
+        }
+
+        return encontrado;
+    }
+
+    // =========================================================
+    // CASO DE USO 5: REGISTRO DE PEDIDO VALIDADO
+    // =========================================================
+
+    public boolean agregarPedido(LocalDate fecha, String nombreFestival, String codigoUnidad) throws Exception {
+        Festival festival = traerFestival(nombreFestival);
+        if (festival == null) {
+            throw new Exception("Error: no existe un festival con ese nombre");
+        }
+
+        UnidadDeVenta unidad = traerUnidad(codigoUnidad);
+        if (unidad == null) {
+            throw new Exception("Error: no existe una unidad con ese código");
+        }
+
+        int id = calcularProximoIdPedido();
+        return lstPedidos.add(new Pedido(id, fecha, festival, unidad));
     }
 
     // =========================================================
@@ -205,6 +236,15 @@ public class Sistema {
         return proximoId;
     }
 
+    private int calcularProximoIdPedido() {
+        int proximoId = 1;
+
+        if (!lstPedidos.isEmpty()) {
+            proximoId = lstPedidos.get(lstPedidos.size() - 1).getId() + 1;
+        }
+
+        return proximoId;
+    }
     
     ///// CU N°7 /////
     public List<Personal> filtroPersonalPorEdad(LocalDate desde, LocalDate hasta){

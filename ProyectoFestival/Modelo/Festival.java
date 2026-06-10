@@ -122,14 +122,22 @@ public class Festival {
         this.unidades = unidades;
     }
 
-    
-
     public void agregarUnidad(UnidadDeVenta u) {
         this.unidades.add(u);
     }
 
     public void eliminarUnidad(UnidadDeVenta u) {
         this.unidades.remove(u);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean resultado = false;
+        if (obj != null && obj instanceof Festival) {
+            Festival otroFestival = (Festival) obj;
+            resultado = this.nombre.equalsIgnoreCase(otroFestival.getNombre());
+        }
+        return resultado;
     }
 
     @Override
