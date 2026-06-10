@@ -124,6 +124,25 @@ public class MainTest {
             System.out.println("Error al calcular el canon: " + e.getMessage());
         }
 
+        // =========================================================
+        // CASO DE USO 4: LIQUIDACIÓN DE HABERES
+        // =========================================================
+
+        System.out.println("\n=== LIQUIDACIÓN DE HABERES ===");
+        try {
+            Personal cocinero = sistema.traerPersonal(30111222);
+            if (cocinero != null) {
+                System.out.println("Sueldo de Cocinero (" + cocinero.getNombre() + " " + cocinero.getApellido() + "): $" + cocinero.calcularSueldo());
+            }
+
+            Personal cajero = sistema.traerPersonal(28999333);
+            if (cajero != null) {
+                System.out.println("Sueldo de Cajero (" + cajero.getNombre() + " " + cajero.getApellido() + "): $" + cajero.calcularSueldo());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al calcular haberes: " + e.getMessage());
+        }
+
         System.out.println("\n=== BAJAS: ELIMINAR UNIDAD ===");
         try {
             sistema.eliminarUnidad("PD12345678");
