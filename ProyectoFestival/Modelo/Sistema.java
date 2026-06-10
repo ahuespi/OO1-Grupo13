@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -204,6 +205,19 @@ public class Sistema {
         return proximoId;
     }
 
+    
+    ///// CU N°7 /////
+    public List<Personal> filtroPersonalPorEdad(LocalDate desde, LocalDate hasta){
+    	List<Personal> resultado = new ArrayList<Personal>();
+    	for(Personal p: lstPersonal) {
+    		if((p.getFechaNacimiento().isEqual(desde) || p.getFechaNacimiento().isAfter(desde)) && (p.getFechaNacimiento().isEqual(hasta) || p.getFechaNacimiento().isBefore(hasta))) {
+    			resultado.add(p);
+    		}
+    	} 
+    	return resultado;
+    }
+    
+    
     // =========================================================
     // GETTERS Y SETTERS
     // =========================================================

@@ -180,12 +180,17 @@ public class MainTest {
         System.out.println("Festivales: " + sistema.getLstFestivales().size());
         System.out.println("Unidades:   " + sistema.getLstUnidades().size());
         System.out.println("Personal:   " + sistema.getLstPersonal().size());
+        
+        System.out.println("\n### FILTRAR PERSONAL POR EDAD###");
+        System.out.println(sistema.filtroPersonalPorEdad(LocalDate.of(1990, 1, 1), LocalDate.of(1991, 12, 31)));
     }
-
+    
     private static Date crearFecha(int anio, int mes, int dia) {
         Calendar cal = Calendar.getInstance();
         cal.set(anio, mes, dia, 0, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
+    
+    
 }
