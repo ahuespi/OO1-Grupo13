@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
  * Representa un plato del catálogo del festival.
  * Buenas prácticas: atributos privados, constructores y getters/setters.
@@ -5,17 +7,17 @@
 public class Plato {
     private int id;
     private String nombre;
-    private double precio;
-    private double costo;
+    private double precioVenta;
+    private double costoProduccion;
 
     public Plato() {
     }
 
-    public Plato(int id, String nombre, double precio, double costo) {
+    public Plato(int id, String nombre, double precioVenta, double costoProduccion) {
         this.id = id;
         this.nombre = nombre;
-        this.precio = precio;
-        this.costo = costo;
+        this.precioVenta = precioVenta;
+        this.costoProduccion = costoProduccion;
     }
 
     public int getId() {
@@ -34,20 +36,28 @@ public class Plato {
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getPrecioVenta() {
+        return precioVenta;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPrecioVenta(double precioVenta) {
+        this.precioVenta = precioVenta;
     }
 
-    public double getCosto() {
-        return costo;
+    public double getCostoProduccion() {
+        return costoProduccion;
     }
 
-    public void setCosto(double costo) {
-        this.costo = costo;
+    public void setCostoProduccion(double costoProduccion) {
+        this.costoProduccion = costoProduccion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plato plato = (Plato) o;
+        return Objects.equals(nombre, plato.nombre);
     }
 
     @Override
@@ -55,8 +65,8 @@ public class Plato {
         return "Plato(" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
-                ", precio=" + precio +
-                ", costo=" + costo +
+                ", precioVenta=" + precioVenta +
+                ", costoProduccion=" + costoProduccion +
                 ')';
     }
 }

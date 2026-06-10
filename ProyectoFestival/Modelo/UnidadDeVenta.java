@@ -35,7 +35,10 @@ public abstract class UnidadDeVenta {
     }
 
     public boolean agregarPlato(Plato plato) {
-        return lstPlatos.add(plato);
+        if (!lstPlatos.contains(plato)) {
+            return lstPlatos.add(plato);
+        }
+        return false;
     }
 
     public Personal traerPersonal(long dni) {

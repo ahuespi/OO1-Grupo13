@@ -1,6 +1,8 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MainTest {
 
@@ -106,6 +108,32 @@ public class MainTest {
         }
 
         // =========================================================
+        // PRUEBA: AGREGAR PLATOS A TRAVÉS DE SISTEMA (CON CONTROL DE DUPLICADOS)
+        // =========================================================
+        System.out.println("\n=== AGREGAR PLATOS A UNIDAD DESDE SISTEMA ===");
+        try {
+            Plato plato1 = new Plato(1, "Hamburguesa Doble", 5000.0, 2000.0);
+            Plato plato2 = new Plato(2, "Papas Fritas", 2500.0, 1000.0);
+            Plato plato1Duplicado = new Plato(3, "Hamburguesa Doble", 6000.0, 2500.0);
+
+            // 1. Obtenemos la unidad usando traerUnidad
+            UnidadDeVenta foodTruckParaPlatos = sistema.traerUnidad("FT12345678");
+            
+            if (foodTruckParaPlatos != null) {
+                // 2. Pasamos el objeto UnidadDeVenta al método del Sistema
+                System.out.println("Agregando: " + plato1.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1, foodTruckParaPlatos));
+                System.out.println("Agregando: " + plato2.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato2, foodTruckParaPlatos));
+                System.out.println("Agregando: " + plato1Duplicado.getNombre() + " (duplicado) a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1Duplicado, foodTruckParaPlatos));
+
+                System.out.println("Platos en " + foodTruckParaPlatos.getNombreComercial() + ": " + foodTruckParaPlatos.getLstPlatos().size());
+            } else {
+                System.out.println("No se encontró la unidad para agregar platos.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al agregar platos: " + e.getMessage());
+        }
+
+        // =========================================================
         // CASO DE USO 3: CÁLCULO DE CANON
         // =========================================================
 
@@ -160,16 +188,18 @@ public class MainTest {
             // 2. Traemos el pedido recién creado (el ID 1 por ser el primero)
             Pedido pedido = sistema.traerPedido(1);
             if (pedido != null) {
-                // Creamos un plato de ejemplo para agregar al pedido
-                Plato hamburguesa = new Plato();
-                hamburguesa.setNombre("Hamburguesa Doble");
-                hamburguesa.setPrecio(5000);
-                hamburguesa.setCosto(2000);
+                // Recuperamos el plato de la unidad de venta para usarlo en el pedido
+                UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
+                Plato hamburguesa = foodTruck.traerPlato("Hamburguesa Doble");
                 
-                // 3. Agregamos el plato al pedido usando el método de la clase Pedido
-                pedido.agregarPlato(hamburguesa, 2);
-                System.out.println("Se agregaron 2 Hamburguesa Doble al pedido ID " + pedido.getId());
-                System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
+                if (hamburguesa != null) {
+                    // 3. Agregamos el plato al pedido usando el método de la clase Pedido
+                    pedido.agregarPlato(hamburguesa, 2);
+                    System.out.println("Se agregaron 2 " + hamburguesa.getNombre() + " al pedido ID " + pedido.getId());
+                    System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
+                } else {
+                    System.out.println("No se encontró el plato en la unidad de venta.");
+                }
             }
             
             // Error esperado: Festival inexistente

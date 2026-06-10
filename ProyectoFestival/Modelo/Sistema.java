@@ -91,6 +91,15 @@ public class Sistema {
                 fechaNacimiento, fechaIngreso, turno));
     }
 
+    public boolean agregarPlatoAUnidad(Plato plato, UnidadDeVenta unidad) throws Exception {
+        // Validamos que la unidad exista en la lista del sistema
+        if (!lstUnidades.contains(unidad)) {
+            throw new Exception("Error: la unidad de venta no existe en el sistema.");
+        }
+        // La lógica de agregar el plato (y evitar duplicados) ya está en UnidadDeVenta
+        return unidad.agregarPlato(plato);
+    }
+
     // =========================================================
     // CASO DE USO 1: BAJAS
     // =========================================================
@@ -147,7 +156,6 @@ public class Sistema {
         UnidadDeVenta encontrado = null;
         int i = 0;
         
-        // Creamos un objeto temporal para usar el método equals
         FoodTruck aBuscar = new FoodTruck();
         aBuscar.setCodigo(codigo);
 
@@ -165,7 +173,6 @@ public class Sistema {
         Festival encontrado = null;
         int i = 0;
         
-        // Creamos un objeto temporal para usar el método equals
         Festival aBuscar = new Festival();
         aBuscar.setNombre(nombre);
 
