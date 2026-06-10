@@ -191,15 +191,19 @@ public class MainTest {
                 // Recuperamos el plato de la unidad de venta para usarlo en el pedido
                 UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
                 Plato hamburguesa = foodTruck.traerPlato("Hamburguesa Doble");
+                Plato papas = foodTruck.traerPlato("Papas Fritas");
                 
                 if (hamburguesa != null) {
                     // 3. Agregamos el plato al pedido usando el método de la clase Pedido
                     pedido.agregarPlato(hamburguesa, 2);
                     System.out.println("Se agregaron 2 " + hamburguesa.getNombre() + " al pedido ID " + pedido.getId());
-                    System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
-                } else {
-                    System.out.println("No se encontró el plato en la unidad de venta.");
                 }
+                
+                if (papas != null) {
+                    pedido.agregarPlato(papas, 1);
+                    System.out.println("Se agregaron 1 " + papas.getNombre() + " al pedido ID " + pedido.getId());
+                }
+                System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
             }
             
             // Error esperado: Festival inexistente
@@ -222,6 +226,30 @@ public class MainTest {
         } catch (Exception e) {
             System.out.println("Error esperado (Unidad inexistente): " + e.getMessage());
         }
+
+        // =========================================================
+        // CASO DE USO 6: REPORTE DE RECAUDACIÓN
+        // =========================================================
+
+        System.out.println("\n=== REPORTE DE RECAUDACIÓN ===");
+        try {
+            Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
+            if (festivalVerano != null) {
+                List<ReporteVenta> reporte = sistema.reporteRecaudacion(festivalVerano);
+                
+                System.out.println("Recaudación del " + festivalVerano.getNombre() + ":");
+                if(reporte.isEmpty()) {
+                	System.out.println("No hubo ventas registradas para este festival.");
+                } else {
+                    for (ReporteVenta rv : reporte) {
+                        System.out.println(rv);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al generar el reporte: " + e.getMessage());
+        }
+
 
         System.out.println("\n=== BAJAS: ELIMINAR UNIDAD ===");
         try {

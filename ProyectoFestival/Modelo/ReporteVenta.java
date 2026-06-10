@@ -1,52 +1,40 @@
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representa un reporte de ventas asociado a una fecha y lista de pedidos.
+ * Representa un reporte de ventas asociado a una unidad de venta.
+ * No persistente.
  */
 public class ReporteVenta {
-    private int id;
-    private LocalDate fecha;
-    private List<Pedido> pedidos;
-    private double totalVentas;
+    private UnidadDeVenta unidad;
+    private double recaudacionTotal;
 
-    public ReporteVenta(int id, LocalDate fecha) {
-        this.id = id;
-        this.fecha = fecha;
-        this.pedidos = new ArrayList<>();
-        this.totalVentas = 0.0;
+    public ReporteVenta(UnidadDeVenta unidad, double recaudacionTotal) {
+        this.unidad = unidad;
+        this.recaudacionTotal = recaudacionTotal;
     }
 
-    public int getId() {
-        return id;
+    public UnidadDeVenta getUnidad() {
+        return unidad;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUnidad(UnidadDeVenta unidad) {
+        this.unidad = unidad;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public double getRecaudacionTotal() {
+        return recaudacionTotal;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setRecaudacionTotal(double recaudacionTotal) {
+        this.recaudacionTotal = recaudacionTotal;
     }
 
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public double getTotalVentas() {
-        return totalVentas;
-    }
-
-    public void setTotalVentas(double totalVentas) {
-        this.totalVentas = totalVentas;
+    @Override
+    public String toString() {
+        return "ReporteVenta [" +
+                "unidad=" + unidad.getNombreComercial() +
+                ", recaudacionTotal=$" + recaudacionTotal +
+                "]";
     }
 }

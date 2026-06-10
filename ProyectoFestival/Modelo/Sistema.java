@@ -220,6 +220,37 @@ public class Sistema {
     }
 
     // =========================================================
+    // CASO DE USO 6: REPORTE DE RECAUDACIÓN
+    // =========================================================
+
+    public List<ReporteVenta> reporteRecaudacion(Festival festival) throws Exception {
+        if (!lstFestivales.contains(festival)) {
+            throw new Exception("Error: el festival no existe en el sistema.");
+        }
+
+        List<ReporteVenta> reporte = new ArrayList<>();
+
+        for (UnidadDeVenta unidad : lstUnidades) {
+            double totalUnidad = 0.0;
+            boolean tuvoVentas = false;
+
+            for (Pedido pedido : lstPedidos) {
+                if (pedido.getFestival().equals(festival) && pedido.getUnidad().equals(unidad)) {
+                    totalUnidad += pedido.calcularMontoTotal();
+                    tuvoVentas = true;
+                }
+            }
+
+            if (tuvoVentas) {
+                reporte.add(new ReporteVenta(unidad, totalUnidad));
+            }
+        }
+
+        return reporte;
+    }
+
+
+    // =========================================================
     // MÉTODOS AUXILIARES PARA ID AUTOMÁTICO
     // =========================================================
 

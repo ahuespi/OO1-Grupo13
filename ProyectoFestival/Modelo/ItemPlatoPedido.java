@@ -35,7 +35,7 @@ public class ItemPlatoPedido {
      */
     public double subtotalVenta() {
         if (plato == null) return 0.0;
-        return cantidad * plato.getPrecio();
+        return cantidad * plato.getPrecioVenta();
     }
 
     /**
@@ -43,6 +43,6 @@ public class ItemPlatoPedido {
      */
     public double subtotalCosto() {
         if (plato == null) return 0.0;
-        return cantidad * plato.getCosto();
+        return cantidad * plato.getCostoProduccion();
     }
 }
