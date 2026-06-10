@@ -105,6 +105,25 @@ public class MainTest {
             System.out.println("Error esperado (código duplicado): " + e.getMessage());
         }
 
+        // =========================================================
+        // CASO DE USO 3: CÁLCULO DE CANON
+        // =========================================================
+
+        System.out.println("\n=== CÁLCULO DE CANON ===");
+        try {
+            UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
+            if (foodTruck != null) {
+                System.out.println("Canon de Food Truck '" + foodTruck.getNombreComercial() + "': $" + foodTruck.calcularCanon());
+            }
+
+            UnidadDeVenta puesto = sistema.traerUnidad("PD12345678");
+            if (puesto != null) {
+                System.out.println("Canon de Puesto Desarmable '" + puesto.getNombreComercial() + "': $" + puesto.calcularCanon());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al calcular el canon: " + e.getMessage());
+        }
+
         System.out.println("\n=== BAJAS: ELIMINAR UNIDAD ===");
         try {
             sistema.eliminarUnidad("PD12345678");
