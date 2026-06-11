@@ -37,13 +37,13 @@ public abstract class Personal {
         return calcularEdad() >= 18;
     }
 
-    public int getId() {
+    public int getIdPersonal() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setIdPersonal(int id) {
         this.id = id;
-    }   
+    }
 
     public String getNombre() {
         return nombre;
@@ -94,6 +94,20 @@ public abstract class Personal {
     public void setFechaIngreso(LocalDate fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }   
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean sonIguales = false;
+
+        if (obj != null && obj instanceof Personal) {
+            Personal otro = (Personal) obj;
+            if (this.dni == otro.getDni()) {
+                sonIguales = true;
+            }
+        }
+
+        return sonIguales;
+    }
 
     @Override
     public String toString() {

@@ -18,6 +18,15 @@ public class Pedido {
      * Constructor obligatorio: la lista `items` se inicializa aquí con
      * `new ArrayList<>()` para asegurar que siempre exista y evitar NPEs.
      */
+    public Pedido() {
+        this.items = new ArrayList<>();
+    }
+
+    public Pedido(int id) {
+        this();
+        this.id = id;
+    }
+
     public Pedido(int id, LocalDate fecha, Festival festival, UnidadDeVenta unidad) {
         this.id = id;
         this.fecha = fecha;
@@ -26,11 +35,11 @@ public class Pedido {
         this.items = new ArrayList<>();
     }
 
-    public int getId() {
+    public int getIdPedido() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setIdPedido(int id) {
         this.id = id;
     }
 
@@ -94,5 +103,19 @@ public class Pedido {
             total += item.subtotalVenta();
         }
         return total;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean sonIguales = false;
+
+        if (obj != null && obj instanceof Pedido) {
+            Pedido otro = (Pedido) obj;
+            if (this.id == otro.getIdPedido()) {
+                sonIguales = true;
+            }
+        }
+
+        return sonIguales;
     }
 }

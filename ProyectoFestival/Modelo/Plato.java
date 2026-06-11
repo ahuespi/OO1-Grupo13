@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 /**
  * Representa un plato del catálogo del festival.
  * Buenas prácticas: atributos privados, constructores y getters/setters.
@@ -20,11 +18,11 @@ public class Plato {
         this.costoProduccion = costoProduccion;
     }
 
-    public int getId() {
+    public int getIdPlato() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setIdPlato(int id) {
         this.id = id;
     }
 
@@ -53,11 +51,17 @@ public class Plato {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Plato plato = (Plato) o;
-        return Objects.equals(nombre, plato.nombre);
+    public boolean equals(Object obj) {
+        boolean sonIguales = false;
+
+        if (obj != null && obj instanceof Plato) {
+            Plato otro = (Plato) obj;
+            if (this.nombre != null && this.nombre.equals(otro.getNombre())) {
+                sonIguales = true;
+            }
+        }
+
+        return sonIguales;
     }
 
     @Override

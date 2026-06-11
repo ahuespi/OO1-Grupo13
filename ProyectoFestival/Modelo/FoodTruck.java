@@ -3,10 +3,6 @@ public class FoodTruck extends UnidadDeVenta {
     private String patente;
     private boolean requiereConexionElectrica;
 
-    public FoodTruck() {
-        super();
-    }
-
     public FoodTruck(int id, String codigo, String nombreComercial, Personal responsable,
                      int superficieMetroCuadrado, String patente,
                      boolean requiereConexionElectrica) throws Exception {

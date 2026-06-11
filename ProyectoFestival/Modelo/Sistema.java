@@ -29,7 +29,9 @@ public class Sistema {
             throw new Exception("Error: ya existe un festival con ese nombre");
         }
 
-        return lstFestivales.add(new Festival(nombre, temporada, fechaInicio, fechaFin,
+        int id = generarIdFestival();
+
+        return lstFestivales.add(new Festival(id, nombre, temporada, fechaInicio, fechaFin,
                 costoSuperficie, costoMontaje, plusElectricidad, sueldoBase));
     }
 
@@ -41,7 +43,7 @@ public class Sistema {
             throw new Exception("Error: ya existe una unidad con ese código");
         }
 
-        int id = calcularProximoIdUnidad();
+        int id = generarIdUnidad();
 
         return lstUnidades.add(new FoodTruck(id, codigo, nombreComercial, responsable,
                 superficieMetroCuadrado, patente, requiereConexionElectrica));
@@ -55,7 +57,7 @@ public class Sistema {
             throw new Exception("Error: ya existe una unidad con ese código");
         }
 
-        int id = calcularProximoIdUnidad();
+        int id = generarIdUnidad();
 
         return lstUnidades.add(new PuestoDesarmable(id, codigo, nombreComercial, responsable,
                 superficieMetroCuadrado, cantidadCarpas, tiempoMontajeMinutos));
@@ -70,7 +72,7 @@ public class Sistema {
             throw new Exception("Error: ya existe personal con ese DNI");
         }
 
-        int id = calcularProximoIdPersonal();
+        int id = generarIdPersonal();
 
         return lstPersonal.add(new Cocinero(id, nombre, apellido, dni,
                 fechaNacimiento, fechaIngreso, especialidad, plusCategoria));
@@ -85,7 +87,7 @@ public class Sistema {
             throw new Exception("Error: ya existe personal con ese DNI");
         }
 
-        int id = calcularProximoIdPersonal();
+        int id = generarIdPersonal();
 
         return lstPersonal.add(new Cajero(id, nombre, apellido, dni,
                 fechaNacimiento, fechaIngreso, turno));
@@ -139,64 +141,55 @@ public class Sistema {
     // =========================================================
 
     public Personal traerPersonal(long dni) {
-        Personal encontrado = null;
         int i = 0;
-
+        Personal encontrado = null;
         while (i < lstPersonal.size() && encontrado == null) {
             if (lstPersonal.get(i).getDni() == dni) {
                 encontrado = lstPersonal.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
-    public UnidadDeVenta traerUnidad(String codigo) throws Exception {
-        UnidadDeVenta encontrado = null;
+    public UnidadDeVenta traerUnidad(String codigo) {
         int i = 0;
-        
-        FoodTruck aBuscar = new FoodTruck();
-        aBuscar.setCodigo(codigo);
-
+        UnidadDeVenta encontrado = null;
         while (i < lstUnidades.size() && encontrado == null) {
-            if (lstUnidades.get(i).equals(aBuscar)) {
+            if (lstUnidades.get(i).getCodigo().equals(codigo)) {
                 encontrado = lstUnidades.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
     public Festival traerFestival(String nombre) {
-        Festival encontrado = null;
         int i = 0;
-        
-        Festival aBuscar = new Festival();
-        aBuscar.setNombre(nombre);
+        Festival encontrado = null;
+        Festival dummy = new Festival();
+        dummy.setNombre(nombre);
 
         while (i < lstFestivales.size() && encontrado == null) {
-            if (lstFestivales.get(i).equals(aBuscar)) {
+            if (lstFestivales.get(i).equals(dummy)) {
                 encontrado = lstFestivales.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
     public Pedido traerPedido(int id) {
-        Pedido encontrado = null;
         int i = 0;
+        Pedido encontrado = null;
+        Pedido dummy = new Pedido(id);
 
         while (i < lstPedidos.size() && encontrado == null) {
-            if (lstPedidos.get(i).getId() == id) {
+            if (lstPedidos.get(i).equals(dummy)) {
                 encontrado = lstPedidos.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
@@ -215,7 +208,7 @@ public class Sistema {
             throw new Exception("Error: no existe una unidad con ese código");
         }
 
-        int id = calcularProximoIdPedido();
+        int id = generarIdPedido();
         return lstPedidos.add(new Pedido(id, fecha, festival, unidad));
     }
 
@@ -254,34 +247,36 @@ public class Sistema {
     // MÉTODOS AUXILIARES PARA ID AUTOMÁTICO
     // =========================================================
 
-    private int calcularProximoIdUnidad() {
-        int proximoId = 1;
+    private int generarIdFestival() {
+        int id = 1;
+        if (!lstFestivales.isEmpty()) {
+            id = lstFestivales.get(lstFestivales.size() - 1).getIdFestival() + 1;
+        }
+        return id;
+    }
 
+    private int generarIdUnidad() {
+        int id = 1;
         if (!lstUnidades.isEmpty()) {
-            proximoId = lstUnidades.get(lstUnidades.size() - 1).getId() + 1;
+            id = lstUnidades.get(lstUnidades.size() - 1).getIdUnidad() + 1;
         }
-
-        return proximoId;
+        return id;
     }
 
-    private int calcularProximoIdPersonal() {
-        int proximoId = 1;
-
+    private int generarIdPersonal() {
+        int id = 1;
         if (!lstPersonal.isEmpty()) {
-            proximoId = lstPersonal.get(lstPersonal.size() - 1).getId() + 1;
+            id = lstPersonal.get(lstPersonal.size() - 1).getIdPersonal() + 1;
         }
-
-        return proximoId;
+        return id;
     }
 
-    private int calcularProximoIdPedido() {
-        int proximoId = 1;
-
+    private int generarIdPedido() {
+        int id = 1;
         if (!lstPedidos.isEmpty()) {
-            proximoId = lstPedidos.get(lstPedidos.size() - 1).getId() + 1;
+            id = lstPedidos.get(lstPedidos.size() - 1).getIdPedido() + 1;
         }
-
-        return proximoId;
+        return id;
     }
     
     ///// CU N°7 /////

@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class UnidadDeVenta {
 
@@ -18,14 +17,20 @@ public abstract class UnidadDeVenta {
         this.lstPlatos = new ArrayList<Plato>();
     }
 
+    protected UnidadDeVenta(String codigo) {
+        this();
+        this.codigo = codigo;
+    }
+
     public UnidadDeVenta(int id, String codigo, String nombreComercial, Personal responsable,
                          int superficieMetroCuadrado) throws Exception {
-        this();
         this.id = id;
         this.setCodigo(codigo);
         this.nombreComercial = nombreComercial;
         this.responsable = responsable;
         this.superficieMetroCuadrado = superficieMetroCuadrado;
+        this.lstPersonal = new ArrayList<Personal>();
+        this.lstPlatos = new ArrayList<Plato>();
     }
 
     public abstract double calcularCanon();
@@ -36,41 +41,53 @@ public abstract class UnidadDeVenta {
 
     public boolean agregarPlato(Plato plato) {
         if (!lstPlatos.contains(plato)) {
+            plato.setIdPlato(generarIdPlato());
             return lstPlatos.add(plato);
         }
         return false;
     }
 
-    public Personal traerPersonal(long dni) {
-        Personal encontrado = null;
-        int i = 0;
+    private int generarIdPlato() {
+        int id = 1;
+        if (!lstPlatos.isEmpty()) {
+            id = lstPlatos.get(lstPlatos.size() - 1).getIdPlato() + 1;
+        }
+        return id;
+    }
 
+    public Personal traerPersonal(long dni) {
+        int i = 0;
+        Personal encontrado = null;
         while (i < lstPersonal.size() && encontrado == null) {
             if (lstPersonal.get(i).getDni() == dni) {
                 encontrado = lstPersonal.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
     public Plato traerPlato(String nombre) {
-        Plato encontrado = null;
         int i = 0;
+        Plato encontrado = null;
+        Plato dummy = new Plato();
+        dummy.setNombre(nombre);
 
         while (i < lstPlatos.size() && encontrado == null) {
-            if (lstPlatos.get(i).getNombre().equalsIgnoreCase(nombre)) {
+            if (lstPlatos.get(i).equals(dummy)) {
                 encontrado = lstPlatos.get(i);
             }
             i++;
         }
-
         return encontrado;
     }
 
-    public int getId() {
+    public int getIdUnidad() {
         return id;
+    }
+
+    public void setIdUnidad(int id) {
+        this.id = id;
     }
 
     public String getCodigo() {
@@ -136,18 +153,15 @@ public abstract class UnidadDeVenta {
 
     @Override
     public boolean equals(Object obj) {
-        boolean resultado = false;
+        boolean sonIguales = false;
 
         if (obj != null && obj instanceof UnidadDeVenta) {
-            UnidadDeVenta otraUnidad = (UnidadDeVenta) obj;
-            resultado = this.codigo.equals(otraUnidad.getCodigo());
+            UnidadDeVenta otra = (UnidadDeVenta) obj;
+            if (this.codigo != null && this.codigo.equals(otra.getCodigo())) {
+                sonIguales = true;
+            }
         }
 
-        return resultado;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(codigo);
+        return sonIguales;
     }
 }

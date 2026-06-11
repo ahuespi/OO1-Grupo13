@@ -3,8 +3,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Festival {
-    private static int contadorId = 1;
-
     private int id;
     private String nombre;
     private String temporada;
@@ -18,15 +16,14 @@ public class Festival {
     private List<UnidadDeVenta> unidades;
 
     public Festival() {
-        this.id = contadorId++;
         this.precio = 0.0;
         this.unidades = new ArrayList<>();
     }
 
-    public Festival(String nombre, String temporada, Date fechaInicio, Date fechaFin,
+    public Festival(int id, String nombre, String temporada, Date fechaInicio, Date fechaFin,
                     double costoSuperficie, double costoMontaje, double plusElectricidad,
                     double sueldoBase) {
-        this.id = contadorId++;
+        this.id = id;
         this.nombre = nombre;
         this.temporada = temporada;
         this.fechaInicio = fechaInicio;
@@ -38,8 +35,12 @@ public class Festival {
         this.unidades = new ArrayList<>();
     }
 
-    public int getId() {
+    public int getIdFestival() {
         return id;
+    }
+
+    public void setIdFestival(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -132,12 +133,16 @@ public class Festival {
 
     @Override
     public boolean equals(Object obj) {
-        boolean resultado = false;
+        boolean sonIguales = false;
+
         if (obj != null && obj instanceof Festival) {
-            Festival otroFestival = (Festival) obj;
-            resultado = this.nombre.equalsIgnoreCase(otroFestival.getNombre());
+            Festival otro = (Festival) obj;
+            if (this.nombre != null && otro.getNombre() != null && this.nombre.equalsIgnoreCase(otro.getNombre())) {
+                sonIguales = true;
+            }
         }
-        return resultado;
+
+        return sonIguales;
     }
 
     @Override

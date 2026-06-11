@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Representa un reporte de ventas asociado a una unidad de venta.
  * No persistente.

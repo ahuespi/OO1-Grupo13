@@ -3,10 +3,6 @@ public class PuestoDesarmable extends UnidadDeVenta {
     private int cantidadCarpas;
     private int tiempoMontajeMinutos;
 
-    public PuestoDesarmable() {
-        super();
-    }
-
     public PuestoDesarmable(int id, String codigo, String nombreComercial, Personal responsable,
                             int superficieMetroCuadrado, int cantidadCarpas,
                             int tiempoMontajeMinutos) throws Exception {

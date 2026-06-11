@@ -6,9 +6,6 @@ public class ItemPlatoPedido {
     private Plato plato;
     private int cantidad;
 
-    public ItemPlatoPedido() {
-    }
-
     public ItemPlatoPedido(Plato plato, int cantidad) {
         this.plato = plato;
         this.cantidad = cantidad;

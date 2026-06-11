@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -196,12 +195,12 @@ public class MainTest {
                 if (hamburguesa != null) {
                     // 3. Agregamos el plato al pedido usando el método de la clase Pedido
                     pedido.agregarPlato(hamburguesa, 2);
-                    System.out.println("Se agregaron 2 " + hamburguesa.getNombre() + " al pedido ID " + pedido.getId());
+                    System.out.println("Se agregaron 2 " + hamburguesa.getNombre() + " al pedido ID " + pedido.getIdPedido());
                 }
                 
                 if (papas != null) {
                     pedido.agregarPlato(papas, 1);
-                    System.out.println("Se agregaron 1 " + papas.getNombre() + " al pedido ID " + pedido.getId());
+                    System.out.println("Se agregaron 1 " + papas.getNombre() + " al pedido ID " + pedido.getIdPedido());
                 }
                 System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
             }
