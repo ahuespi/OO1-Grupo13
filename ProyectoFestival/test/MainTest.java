@@ -488,6 +488,82 @@ public class MainTest {
         }
 
         System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 13: UNIDADES CON MAYOR CANON");
+        System.out.println("=========================================================");
+        try {
+            // Creamos un nuevo festival de prueba para no alterar el flujo de los anteriores
+            Date inicioTest = crearFecha(2026, Calendar.JANUARY, 1);
+            Date finTest    = crearFecha(2026, Calendar.JANUARY, 10);
+            sistema.agregarFestival("Festival Canon 2026", "Verano", inicioTest, finTest, 1000.0, 10.0, 500.0, 50000.0);
+            Festival fest = sistema.traerFestival("Festival Canon 2026");
+
+            // Creamos 4 unidades
+            // Unidad A: Food Truck, superficie 20, requiere electrica -> Canon = 20*1000 + 500 = 20500
+            sistema.agregarFoodTruck("FT0000000A", "Food Truck A", sistema.traerPersonal(30111222), 20, "AAA111", true);
+            UnidadDeVenta ua = sistema.traerUnidad("FT0000000A");
+            fest.agregarUnidad(ua);
+
+            // Unidad B: Food Truck, superficie 10, requiere electrica -> Canon = 10*1000 + 500 = 10500
+            sistema.agregarFoodTruck("FT0000000B", "Food Truck B", sistema.traerPersonal(30111222), 10, "BBB222", true);
+            UnidadDeVenta ub = sistema.traerUnidad("FT0000000B");
+            fest.agregarUnidad(ub);
+
+            // Unidad C: Food Truck, superficie 30, no requiere electrica -> Canon = 30*1000 = 30000
+            sistema.agregarFoodTruck("FT0000000C", "Food Truck C", sistema.traerPersonal(30111222), 30, "CCC333", false);
+            UnidadDeVenta uc = sistema.traerUnidad("FT0000000C");
+            fest.agregarUnidad(uc);
+
+            // Unidad D: Puesto Desarmable, superficie 15, montaje 60 min -> Canon = 15*1000 - 60*10 = 15000 - 600 = 14400
+            sistema.agregarPuestoDesarmable("PD0000000D", "Puesto D", sistema.traerPersonal(30111222), 15, 2, 60);
+            UnidadDeVenta ud = sistema.traerUnidad("PD0000000D");
+            fest.agregarUnidad(ud);
+
+            // Los cánones esperados para este festival:
+            // Food Truck C (uc): 30000.0
+            // Food Truck A (ua): 20500.0
+            // Puesto D (ud): 14400.0
+            // Food Truck B (ub): 10500.0
+
+            System.out.println("--- 13.1 CASO EXITOSO (Top 3 de 4 unidades) ---");
+            List<ReporteMayoresCanon> reporte = sistema.reporteMayoresCanon(fest);
+            for (ReporteMayoresCanon r : reporte) {
+                System.out.println("- " + r.getNombreComercial() + " (" + r.getCodigo() + ") | Tipo: " + r.getTipoUnidad() + " | Canon: $" + r.getCanon());
+            }
+
+            System.out.println("\n--- 13.2 CASO CON MENOS DE 3 UNIDADES ---");
+            Date inicioTestPocos = crearFecha(2026, Calendar.FEBRUARY, 1);
+            Date finTestPocos    = crearFecha(2026, Calendar.FEBRUARY, 5);
+            sistema.agregarFestival("Festival Canon Pocos", "Verano", inicioTestPocos, finTestPocos, 1000.0, 10.0, 500.0, 50000.0);
+            Festival festPocos = sistema.traerFestival("Festival Canon Pocos");
+            // Le agregamos solo 2 unidades
+            festPocos.agregarUnidad(ua);
+            festPocos.agregarUnidad(ub);
+            List<ReporteMayoresCanon> reportePocos = sistema.reporteMayoresCanon(festPocos);
+            System.out.println("Cantidad de reportes devueltos (debe ser 2): " + reportePocos.size());
+            for (ReporteMayoresCanon r : reportePocos) {
+                System.out.println("- " + r.getNombreComercial() + " (" + r.getCodigo() + ") | Canon: $" + r.getCanon());
+            }
+
+            System.out.println("\n--- 13.3 CASOS DE ERROR (VALIDACIONES) ---");
+            try {
+                sistema.reporteMayoresCanon(null);
+            } catch (Exception e) {
+                System.out.println("Error esperado (festival null): " + e.getMessage());
+            }
+
+            try {
+                Festival festInexistente = new Festival(999, "Inexistente", "Otoño", new Date(), new Date(), 0, 0, 0, 0);
+                sistema.reporteMayoresCanon(festInexistente);
+            } catch (Exception e) {
+                System.out.println("Error esperado (festival inexistente): " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error inesperado en CU 13: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("\n=========================================================");
         System.out.println("EXTRAS: ESTADO FINAL DEL SISTEMA Y FILTRADO");
         System.out.println("=========================================================");
 

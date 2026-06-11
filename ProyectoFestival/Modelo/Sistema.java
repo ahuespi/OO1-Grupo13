@@ -416,6 +416,53 @@ public class Sistema {
             }
         }
     }
+    // =========================================================
+    // CASO DE USO 13: UNIDADES CON MAYOR CANON
+    // =========================================================
+    public List<ReporteMayoresCanon> reporteMayoresCanon(Festival festival) throws Exception {
+        if (festival == null || !lstFestivales.contains(festival)) {
+            throw new Exception("Error: el festival no existe en el sistema.");
+        }
+
+        List<UnidadDeVenta> unidadesFestival = new ArrayList<>();
+        // 1. Agregar unidades asociadas directamente al festival
+        if (festival.getUnidades() != null) {
+            for (UnidadDeVenta u : festival.getUnidades()) {
+                if (u != null && !unidadesFestival.contains(u)) {
+                    unidadesFestival.add(u);
+                }
+            }
+        }
+
+        // 2. Agregar unidades que tienen pedidos en este festival
+        for (Pedido p : lstPedidos) {
+            if (p.getFestival().equals(festival)) {
+                UnidadDeVenta u = p.getUnidad();
+                if (u != null && !unidadesFestival.contains(u)) {
+                    unidadesFestival.add(u);
+                }
+            }
+        }
+
+        // Calcular el canon para cada una y guardarlos en una lista temporaria de reportes
+        List<ReporteMayoresCanon> todosReportes = new ArrayList<>();
+        for (UnidadDeVenta u : unidadesFestival) {
+            double canon = u.calcularCanon(festival);
+            String tipoUnidad = u instanceof FoodTruck ? "Food Truck" : (u instanceof PuestoDesarmable ? "Puesto Desarmable" : u.getClass().getSimpleName());
+            todosReportes.add(new ReporteMayoresCanon(u.getNombreComercial(), u.getCodigo(), tipoUnidad, canon));
+        }
+
+        // Ordenar de mayor a menor canon
+        todosReportes.sort((r1, r2) -> Double.compare(r2.getCanon(), r1.getCanon()));
+
+        // Tomar las 3 primeras
+        List<ReporteMayoresCanon> resultado = new ArrayList<>();
+        for (int i = 0; i < Math.min(3, todosReportes.size()); i++) {
+            resultado.add(todosReportes.get(i));
+        }
+
+        return resultado;
+    }
     
     // =========================================================
     // GETTERS Y SETTERS
