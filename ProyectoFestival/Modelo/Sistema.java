@@ -102,6 +102,15 @@ public class Sistema {
         return unidad.agregarPlato(plato);
     }
 
+    public boolean agregarPlato(String codigoUnidad, String nombre, double precio, double costo) throws Exception {
+        UnidadDeVenta unidad = traerUnidad(codigoUnidad);       
+        if (unidad == null) {
+            throw new Exception("No existe la unidad");
+        }
+        // Se asigna ID 0 temporalmente, ya que UnidadDeVenta.agregarPlato generará el ID definitivo
+        return unidad.agregarPlato(new Plato(0, nombre, precio, costo));
+    }
+
     // =========================================================
     // CASO DE USO 1: BAJAS
     // =========================================================
@@ -198,6 +207,10 @@ public class Sistema {
     // =========================================================
 
     public boolean agregarPedido(LocalDate fecha, String nombreFestival, String codigoUnidad) throws Exception {
+        return agregarPedido(fecha, nombreFestival, codigoUnidad, new ArrayList<>());
+    }
+
+    public boolean agregarPedido(LocalDate fecha, String nombreFestival, String codigoUnidad, List<ItemPlatoPedido> items) throws Exception {
         Festival festival = traerFestival(nombreFestival);
         if (festival == null) {
             throw new Exception("Error: no existe un festival con ese nombre");
@@ -209,7 +222,9 @@ public class Sistema {
         }
 
         int id = generarIdPedido();
-        return lstPedidos.add(new Pedido(id, fecha, festival, unidad));
+        Pedido pedido = new Pedido(id, fecha, festival, unidad);
+        pedido.setItems(items);
+        return lstPedidos.add(pedido);
     }
 
     // =========================================================

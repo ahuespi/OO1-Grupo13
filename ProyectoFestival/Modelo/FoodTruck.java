@@ -12,11 +12,11 @@ public class FoodTruck extends UnidadDeVenta {
     }
 
     @Override
-    public double calcularCanon() {
-        double canon = getSuperficieMetroCuadrado() * 500;
+    public double calcularCanon(Festival festival) {
+        double canon = getSuperficieMetroCuadrado() * festival.getCostoSuperficie();
 
         if (requiereConexionElectrica) {
-            canon += 2000;
+            canon += festival.getPlusElectricidad();
         }
 
         return canon;

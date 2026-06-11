@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public abstract class UnidadDeVenta {
         this.lstPlatos = new ArrayList<Plato>();
     }
 
-    public abstract double calcularCanon();
+    public abstract double calcularCanon(Festival festival);
 
     public boolean agregarPersonal(Personal personal) {
         return lstPersonal.add(personal);
@@ -139,6 +140,71 @@ public abstract class UnidadDeVenta {
 
     public void setLstPlatos(List<Plato> lstPlatos) {
         this.lstPlatos = lstPlatos;
+    }
+
+    public double calcularRentabilidadNeta(List<Pedido> pedidos) { 
+        double totalVentas = 0;
+        double totalCostos = 0;
+        double totalSueldos = 0;
+        double totalCanon = 0;
+
+        List<Festival> festivalesInvolucrados = new ArrayList<>();
+
+        for (Pedido p : pedidos) {
+            if (p.getUnidad().equals(this)) {              
+                for (ItemPlatoPedido item : p.getItems()) {
+                    totalVentas += item.subtotalVenta();
+                    totalCostos += item.subtotalCosto();
+                }
+                if (!festivalesInvolucrados.contains(p.getFestival())) {
+                    festivalesInvolucrados.add(p.getFestival());
+                }
+            }
+        }
+        
+        for (Personal p : lstPersonal) {
+            totalSueldos += p.calcularSueldo();
+        }
+        
+        for (Festival f : festivalesInvolucrados) {
+            totalCanon += this.calcularCanon(f);
+        }
+        
+        return totalVentas - totalCostos - totalSueldos - totalCanon;
+    }
+
+    public double calcularRentabilidadNeta(List<Pedido> pedidos, LocalDate desde, LocalDate hasta) { 
+        double totalVentas = 0;
+        double totalCostos = 0;
+        double totalSueldos = 0;
+        double totalCanon = 0;
+
+        List<Festival> festivalesInvolucrados = new ArrayList<>();
+
+        for (Pedido p : pedidos) {
+            if (p.getUnidad().equals(this)) {              
+                LocalDate fecha = p.getFecha();
+                if ((fecha.isEqual(desde) || fecha.isAfter(desde)) && (fecha.isEqual(hasta) || fecha.isBefore(hasta))) {
+                    for (ItemPlatoPedido item : p.getItems()) {
+                        totalVentas += item.subtotalVenta();
+                        totalCostos += item.subtotalCosto();
+                    }
+                    if (!festivalesInvolucrados.contains(p.getFestival())) {
+                        festivalesInvolucrados.add(p.getFestival());
+                    }
+                }
+            }
+        }
+        
+        for (Personal p : lstPersonal) {
+            totalSueldos += p.calcularSueldo();
+        }
+        
+        for (Festival f : festivalesInvolucrados) {
+            totalCanon += this.calcularCanon(f);
+        }
+        
+        return totalVentas - totalCostos - totalSueldos - totalCanon;
     }
 
     @Override

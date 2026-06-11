@@ -1,0 +1,10 @@
+/bin/
+
+.classpath
+.project
+ProyectoFestival.iml
+
+.idea/
+.vscode/
+
+*.class

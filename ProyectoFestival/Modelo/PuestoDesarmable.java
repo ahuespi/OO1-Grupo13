@@ -12,8 +12,8 @@ public class PuestoDesarmable extends UnidadDeVenta {
     }
 
     @Override
-    public double calcularCanon() {
-        return (getSuperficieMetroCuadrado() * 500) - (tiempoMontajeMinutos * 10);
+    public double calcularCanon(Festival festival) {
+        return (getSuperficieMetroCuadrado() * festival.getCostoSuperficie()) - (tiempoMontajeMinutos * festival.getCostoMontaje());
     }
 
     public int getCantidadCarpas() {

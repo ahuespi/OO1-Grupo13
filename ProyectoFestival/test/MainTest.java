@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainTest {
@@ -133,14 +134,15 @@ public class MainTest {
         System.out.println("CASO DE USO 3: CÁLCULO DE CANON");
         System.out.println("=========================================================");
         try {
+            Festival festival = sistema.traerFestival("Festival Verano 2025");
             UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
-            if (foodTruck != null) {
-                System.out.println("Canon de Food Truck '" + foodTruck.getNombreComercial() + "': $" + foodTruck.calcularCanon());
+            if (foodTruck != null && festival != null) {
+                System.out.println("Canon de Food Truck '" + foodTruck.getNombreComercial() + "': $" + foodTruck.calcularCanon(festival));
             }
 
             UnidadDeVenta puesto = sistema.traerUnidad("PD12345678");
-            if (puesto != null) {
-                System.out.println("Canon de Puesto Desarmable '" + puesto.getNombreComercial() + "': $" + puesto.calcularCanon());
+            if (puesto != null && festival != null) {
+                System.out.println("Canon de Puesto Desarmable '" + puesto.getNombreComercial() + "': $" + puesto.calcularCanon(festival));
             }
         } catch (Exception e) {
             System.err.println("Error al calcular el canon: " + e.getMessage());
@@ -236,6 +238,92 @@ public class MainTest {
             }
         } catch (Exception e) {
             System.err.println("Error al generar el reporte: " + e.getMessage());
+        }
+
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 8 y 9: CÁLCULO DE RENTABILIDAD NETA");
+        System.out.println("=========================================================");
+        
+        // 1. Dar de alta platos para la prueba de rentabilidad
+        System.out.println("Altas de platos para rentabilidad...");
+        try {
+            sistema.agregarPlato("FT12345678", "Hamburguesa", 12000.0, 4000.0);
+            sistema.agregarPlato("FT12345678", "Papas Fritas", 5200.0, 1500.0);
+            sistema.agregarPlato("FT12345678", "Pizza", 25000.0, 10000.0);
+            sistema.agregarPlato("FT12345678", "Rabas", 15000.0, 7300.0);
+            sistema.agregarPlato("FT12345678", "Cornalitos", 7500.0, 3300.0);
+            System.out.println("Platos agregados correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al agregar platos: " + e.getMessage());
+        } 
+        
+        // 2. Asignar el personal
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            ft.agregarPersonal(sistema.traerPersonal(30111222)); // Ana Gomez (Cocinero, sueldo 120000)
+            System.out.println("Personal asignado correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al asignar personal: " + e.getMessage());
+        }
+        
+        // 3. Agregar Pedido 2 (fecha = hoy) con los items descritos por el compañero
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            List<ItemPlatoPedido> items = new ArrayList<>();
+            items.add(new ItemPlatoPedido(ft.traerPlato("Hamburguesa"), 13));
+            items.add(new ItemPlatoPedido(ft.traerPlato("Papas Fritas"), 22));
+            items.add(new ItemPlatoPedido(ft.traerPlato("Pizza"), 5));
+            items.add(new ItemPlatoPedido(ft.traerPlato("Rabas"), 10));
+            items.add(new ItemPlatoPedido(ft.traerPlato("Cornalitos"), 7));
+            
+            sistema.agregarPedido(LocalDate.now(), "Festival Verano 2025", "FT12345678", items);
+            System.out.println("Pedido de hoy con items agregado correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al agregar pedido: " + e.getMessage());
+        }
+
+        // 4. Agregar Pedido 3 (fecha = hace 5 días)
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            List<ItemPlatoPedido> items = new ArrayList<>();
+            items.add(new ItemPlatoPedido(ft.traerPlato("Pizza"), 1)); // Venta: 25000, Costo: 10000
+            
+            sistema.agregarPedido(LocalDate.now().minusDays(5), "Festival Verano 2025", "FT12345678", items);
+            System.out.println("Pedido de hace 5 días agregado correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al agregar pedido del pasado: " + e.getMessage());
+        }
+
+        // 5. Calcular la Rentabilidad Neta (CU 8) - Todos los pedidos
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            double rentabilidadTotal = ft.calcularRentabilidadNeta(sistema.getLstPedidos());
+            System.out.println("Rentabilidad Neta Total (CU 8): $" + rentabilidadTotal);
+        } catch (Exception e) {
+            System.err.println("Error al calcular rentabilidad total: " + e.getMessage());
+        }
+
+        // 6. Calcular la Rentabilidad Neta entre dos fechas (CU 9)
+        // Rango A: incluye solo hoy y ayer (excluye el de hace 5 días)
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            LocalDate desde = LocalDate.now().minusDays(1);
+            LocalDate hasta = LocalDate.now().plusDays(1);
+            double rentabilidadRangoA = ft.calcularRentabilidadNeta(sistema.getLstPedidos(), desde, hasta);
+            System.out.println("Rentabilidad Neta Rango A (hoy +/- 1 día) (CU 9): $" + rentabilidadRangoA);
+        } catch (Exception e) {
+            System.err.println("Error al calcular rentabilidad Rango A: " + e.getMessage());
+        }
+
+        // Rango B: incluye todo (hace 10 días a hoy + 1)
+        try {
+            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
+            LocalDate desde = LocalDate.now().minusDays(10);
+            LocalDate hasta = LocalDate.now().plusDays(1);
+            double rentabilidadRangoB = ft.calcularRentabilidadNeta(sistema.getLstPedidos(), desde, hasta);
+            System.out.println("Rentabilidad Neta Rango B (hace 10 días a hoy) (CU 9): $" + rentabilidadRangoB);
+        } catch (Exception e) {
+            System.err.println("Error al calcular rentabilidad Rango B: " + e.getMessage());
         }
 
         System.out.println("\n=========================================================");
