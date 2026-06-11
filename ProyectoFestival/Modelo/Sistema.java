@@ -305,6 +305,29 @@ public class Sistema {
     	return resultado;
     }
     
+    // =========================================================
+    // CASO DE USO 10: RANKING DE UNIDADES
+    // =========================================================
+    public List<UnidadDeVenta> rankingUnidad(Festival festival) throws Exception {
+        return rankingUnidades(festival);
+    }
+
+    public List<UnidadDeVenta> rankingUnidades(Festival festival) throws Exception {
+        if (festival == null || !lstFestivales.contains(festival)) {
+            throw new Exception("Error: el festival no existe en el sistema.");
+        }
+
+        List<UnidadDeVenta> ranking = new ArrayList<>(lstUnidades);
+        ranking.sort((u1, u2) -> Double.compare(u2.calcularRecaudacion(lstPedidos, festival), u1.calcularRecaudacion(lstPedidos, festival)));
+        return ranking;
+    }
+
+    public List<UnidadDeVenta> rankingUnidades() {
+        List<UnidadDeVenta> ranking = new ArrayList<>(lstUnidades);
+        ranking.sort((u1, u2) -> Double.compare(u2.calcularRecaudacion(lstPedidos), u1.calcularRecaudacion(lstPedidos)));
+        return ranking;
+    }
+    
     
     // =========================================================
     // GETTERS Y SETTERS

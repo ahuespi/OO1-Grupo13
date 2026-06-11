@@ -207,6 +207,26 @@ public abstract class UnidadDeVenta {
         return totalVentas - totalCostos - totalSueldos - totalCanon;
     }
 
+    public double calcularRecaudacion(List<Pedido> pedidos) {
+        double total = 0.0;
+        for (Pedido p : pedidos) {
+            if (p.getUnidad().equals(this)) {
+                total += p.calcularMontoTotal();
+            }
+        }
+        return total;
+    }
+
+    public double calcularRecaudacion(List<Pedido> pedidos, Festival festival) {
+        double total = 0.0;
+        for (Pedido p : pedidos) {
+            if (p.getUnidad().equals(this) && p.getFestival().equals(festival)) {
+                total += p.calcularMontoTotal();
+            }
+        }
+        return total;
+    }
+
     @Override
     public String toString() {
         return "UnidadDeVenta [id=" + id +

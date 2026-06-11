@@ -34,6 +34,25 @@ public class MainTest {
             );
             System.out.println("Cajero agregado correctamente.");
 
+            sistema.agregarCocinero(
+                    "Lucia", "Gomez",
+                    32111222,
+                    LocalDate.of(1992, 10, 15),
+                    LocalDate.of(2021, 5, 10),
+                    "Pastas",
+                    25000
+            );
+            System.out.println("Cocinero adicional agregado correctamente.");
+
+            sistema.agregarCajero(
+                    "Martin", "Perez",
+                    33111222,
+                    LocalDate.of(1988, 3, 25),
+                    LocalDate.of(2019, 11, 1),
+                    "noche"
+            );
+            System.out.println("Cajero adicional agregado correctamente.");
+
             // Error esperado: DNI duplicado
             sistema.agregarCocinero(
                     "Otro", "Nombre",
@@ -67,6 +86,15 @@ public class MainTest {
             );
             System.out.println("Festival 'Festival Invierno 2025' agregado correctamente.");
 
+            Date inicioPrimavera = crearFecha(2025, Calendar.SEPTEMBER, 21);
+            Date finPrimavera    = crearFecha(2025, Calendar.SEPTEMBER, 30);
+            sistema.agregarFestival(
+                    "Festival Primavera 2025", "Primavera",
+                    inicioPrimavera, finPrimavera,
+                    480.0, 290.0, 100.0, 78000.0
+            );
+            System.out.println("Festival 'Festival Primavera 2025' agregado correctamente.");
+
             // Error esperado: nombre duplicado
             sistema.agregarFestival(
                     "Festival Verano 2025", "Verano",
@@ -79,26 +107,38 @@ public class MainTest {
 
         System.out.println("\n--- 1.3 ALTAS: UNIDADES DE VENTA ---");
         try {
-            Personal responsable = sistema.traerPersonal(30111222);
-
             sistema.agregarFoodTruck(
                     "FT12345678", "Food Truck Norte",
-                    responsable,
+                    sistema.traerPersonal(30111222),
                     10, "ABC123", true
             );
             System.out.println("FoodTruck 'FT12345678' agregado correctamente.");
 
             sistema.agregarPuestoDesarmable(
                     "PD12345678", "Puesto Sur",
-                    responsable,
+                    sistema.traerPersonal(30111222),
                     8, 3, 60
             );
             System.out.println("PuestoDesarmable 'PD12345678' agregado correctamente.");
 
+            sistema.agregarFoodTruck(
+                    "FT99999999", "Food Truck Sur",
+                    sistema.traerPersonal(32111222),
+                    12, "DEF456", true
+            );
+            System.out.println("FoodTruck 'FT99999999' agregado correctamente.");
+
+            sistema.agregarPuestoDesarmable(
+                    "PD99999999", "Puesto Oeste",
+                    sistema.traerPersonal(33111222),
+                    6, 2, 45
+            );
+            System.out.println("PuestoDesarmable 'PD99999999' agregado correctamente.");
+
             // Error esperado: código duplicado
             sistema.agregarFoodTruck(
                     "FT12345678", "Otro Truck",
-                    responsable,
+                    sistema.traerPersonal(30111222),
                     5, "XYZ999", false
             );
         } catch (Exception e) {
@@ -113,19 +153,18 @@ public class MainTest {
             Plato plato2 = new Plato(2, "Papas Fritas", 2500.0, 1000.0);
             Plato plato1Duplicado = new Plato(3, "Hamburguesa Doble", 6000.0, 2500.0);
 
-            // 1. Obtenemos la unidad usando traerUnidad
-            UnidadDeVenta foodTruckParaPlatos = sistema.traerUnidad("FT12345678");
-            
-            if (foodTruckParaPlatos != null) {
-                // 2. Pasamos el objeto UnidadDeVenta al método del Sistema
-                System.out.println("Agregando: " + plato1.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1, foodTruckParaPlatos));
-                System.out.println("Agregando: " + plato2.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato2, foodTruckParaPlatos));
-                System.out.println("Agregando: " + plato1Duplicado.getNombre() + " (duplicado) a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1Duplicado, foodTruckParaPlatos));
+            // 2. Pasamos el objeto UnidadDeVenta al método del Sistema
+            System.out.println("Agregando: " + plato1.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1, sistema.traerUnidad("FT12345678")));
+            System.out.println("Agregando: " + plato2.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato2, sistema.traerUnidad("FT12345678")));
+            System.out.println("Agregando: " + plato1Duplicado.getNombre() + " (duplicado) a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1Duplicado, sistema.traerUnidad("FT12345678")));
 
-                System.out.println("Platos en " + foodTruckParaPlatos.getNombreComercial() + ": " + foodTruckParaPlatos.getLstPlatos().size());
-            } else {
-                System.out.println("No se encontró la unidad para agregar platos.");
-            }
+            System.out.println("Platos en " + sistema.traerUnidad("FT12345678").getNombreComercial() + ": " + sistema.traerUnidad("FT12345678").getLstPlatos().size());
+
+            // Agregar platos a la nueva unidad FT99999999 y PD99999999
+            Plato taco = new Plato(4, "Tacos de Carne", 4000.0, 1800.0);
+            Plato empanada = new Plato(5, "Empanada Criolla", 1200.0, 500.0);
+            System.out.println("Agregando: " + taco.getNombre() + " a FT99999999 -> " + sistema.agregarPlatoAUnidad(taco, sistema.traerUnidad("FT99999999")));
+            System.out.println("Agregando: " + empanada.getNombre() + " a PD99999999 -> " + sistema.agregarPlatoAUnidad(empanada, sistema.traerUnidad("PD99999999")));
         } catch (Exception e) {
             System.err.println("Error al agregar platos: " + e.getMessage());
         }
@@ -134,16 +173,11 @@ public class MainTest {
         System.out.println("CASO DE USO 3: CÁLCULO DE CANON");
         System.out.println("=========================================================");
         try {
-            Festival festival = sistema.traerFestival("Festival Verano 2025");
-            UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
-            if (foodTruck != null && festival != null) {
-                System.out.println("Canon de Food Truck '" + foodTruck.getNombreComercial() + "': $" + foodTruck.calcularCanon(festival));
-            }
+            System.out.println("Canon de Food Truck '" + sistema.traerUnidad("FT12345678").getNombreComercial() + "': $" + sistema.traerUnidad("FT12345678").calcularCanon(sistema.traerFestival("Festival Verano 2025")));
 
-            UnidadDeVenta puesto = sistema.traerUnidad("PD12345678");
-            if (puesto != null && festival != null) {
-                System.out.println("Canon de Puesto Desarmable '" + puesto.getNombreComercial() + "': $" + puesto.calcularCanon(festival));
-            }
+            System.out.println("Canon de Puesto Desarmable '" + sistema.traerUnidad("PD12345678").getNombreComercial() + "': $" + sistema.traerUnidad("PD12345678").calcularCanon(sistema.traerFestival("Festival Verano 2025")));
+
+            System.out.println("Canon de Food Truck '" + sistema.traerUnidad("FT99999999").getNombreComercial() + "': $" + sistema.traerUnidad("FT99999999").calcularCanon(sistema.traerFestival("Festival Primavera 2025")));
         } catch (Exception e) {
             System.err.println("Error al calcular el canon: " + e.getMessage());
         }
@@ -152,15 +186,9 @@ public class MainTest {
         System.out.println("CASO DE USO 4: LIQUIDACIÓN DE HABERES");
         System.out.println("=========================================================");
         try {
-            Personal cocinero = sistema.traerPersonal(30111222);
-            if (cocinero != null) {
-                System.out.println("Sueldo de Cocinero (" + cocinero.getNombre() + " " + cocinero.getApellido() + "): $" + cocinero.calcularSueldo());
-            }
+            System.out.println("Sueldo de Cocinero (" + sistema.traerPersonal(30111222).getNombre() + " " + sistema.traerPersonal(30111222).getApellido() + "): $" + sistema.traerPersonal(30111222).calcularSueldo());
 
-            Personal cajero = sistema.traerPersonal(28999333);
-            if (cajero != null) {
-                System.out.println("Sueldo de Cajero (" + cajero.getNombre() + " " + cajero.getApellido() + "): $" + cajero.calcularSueldo());
-            }
+            System.out.println("Sueldo de Cajero (" + sistema.traerPersonal(28999333).getNombre() + " " + sistema.traerPersonal(28999333).getApellido() + "): $" + sistema.traerPersonal(28999333).calcularSueldo());
         } catch (Exception e) {
             System.err.println("Error al calcular haberes: " + e.getMessage());
         }
@@ -178,25 +206,14 @@ public class MainTest {
             System.out.println("Pedido registrado correctamente con Festival y Unidad válidos.");
             
             // 2. Traemos el pedido recién creado (el ID 1 por ser el primero)
-            Pedido pedido = sistema.traerPedido(1);
-            if (pedido != null) {
-                // Recuperamos el plato de la unidad de venta para usarlo en el pedido
-                UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
-                Plato hamburguesa = foodTruck.traerPlato("Hamburguesa Doble");
-                Plato papas = foodTruck.traerPlato("Papas Fritas");
-                
-                if (hamburguesa != null) {
-                    // 3. Agregamos el plato al pedido usando el método de la clase Pedido
-                    pedido.agregarPlato(hamburguesa, 2);
-                    System.out.println("Se agregaron 2 " + hamburguesa.getNombre() + " al pedido ID " + pedido.getIdPedido());
-                }
-                
-                if (papas != null) {
-                    pedido.agregarPlato(papas, 1);
-                    System.out.println("Se agregaron 1 " + papas.getNombre() + " al pedido ID " + pedido.getIdPedido());
-                }
-                System.out.println("Monto total del pedido: $" + pedido.calcularMontoTotal());
-            }
+            // 3. Agregamos el plato al pedido usando el método de la clase Pedido
+            sistema.traerPedido(1).agregarPlato(sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa Doble"), 2);
+            System.out.println("Se agregaron 2 " + sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa Doble").getNombre() + " al pedido ID " + sistema.traerPedido(1).getIdPedido());
+            
+            sistema.traerPedido(1).agregarPlato(sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 1);
+            System.out.println("Se agregaron 1 " + sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas").getNombre() + " al pedido ID " + sistema.traerPedido(1).getIdPedido());
+            
+            System.out.println("Monto total del pedido: $" + sistema.traerPedido(1).calcularMontoTotal());
             
             // Error esperado: Festival inexistente
             sistema.agregarPedido(
@@ -223,17 +240,12 @@ public class MainTest {
         System.out.println("CASO DE USO 6: REPORTE DE RECAUDACIÓN");
         System.out.println("=========================================================");
         try {
-            Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
-            if (festivalVerano != null) {
-                List<ReporteVenta> reporte = sistema.reporteRecaudacion(festivalVerano);
-                
-                System.out.println("Recaudación del " + festivalVerano.getNombre() + ":");
-                if(reporte.isEmpty()) {
-                	System.out.println("No hubo ventas registradas para este festival.");
-                } else {
-                    for (ReporteVenta rv : reporte) {
-                        System.out.println(rv);
-                    }
+            System.out.println("Recaudación del " + sistema.traerFestival("Festival Verano 2025").getNombre() + ":");
+            if(sistema.reporteRecaudacion(sistema.traerFestival("Festival Verano 2025")).isEmpty()) {
+                System.out.println("No hubo ventas registradas para este festival.");
+            } else {
+                for (ReporteVenta rv : sistema.reporteRecaudacion(sistema.traerFestival("Festival Verano 2025"))) {
+                    System.out.println(rv);
                 }
             }
         } catch (Exception e) {
@@ -259,8 +271,7 @@ public class MainTest {
         
         // 2. Asignar el personal
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
-            ft.agregarPersonal(sistema.traerPersonal(30111222)); // Ana Gomez (Cocinero, sueldo 120000)
+            sistema.traerUnidad("FT12345678").agregarPersonal(sistema.traerPersonal(30111222)); // Ana Gomez (Cocinero, sueldo 120000)
             System.out.println("Personal asignado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al asignar personal: " + e.getMessage());
@@ -268,27 +279,31 @@ public class MainTest {
         
         // 3. Agregar Pedido 2 (fecha = hoy) con los items descritos por el compañero
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
             List<ItemPlatoPedido> items = new ArrayList<>();
-            items.add(new ItemPlatoPedido(ft.traerPlato("Hamburguesa"), 13));
-            items.add(new ItemPlatoPedido(ft.traerPlato("Papas Fritas"), 22));
-            items.add(new ItemPlatoPedido(ft.traerPlato("Pizza"), 5));
-            items.add(new ItemPlatoPedido(ft.traerPlato("Rabas"), 10));
-            items.add(new ItemPlatoPedido(ft.traerPlato("Cornalitos"), 7));
+            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa"), 13));
+            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 22));
+            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 5));
+            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Rabas"), 10));
+            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Cornalitos"), 7));
             
             sistema.agregarPedido(LocalDate.now(), "Festival Verano 2025", "FT12345678", items);
             System.out.println("Pedido de hoy con items agregado correctamente.");
+
+            // Agregar pedido para la nueva unidad en Festival Primavera 2025
+            List<ItemPlatoPedido> itemsPrimavera = new ArrayList<>();
+            itemsPrimavera.add(new ItemPlatoPedido(sistema.traerUnidad("FT99999999").traerPlato("Tacos de Carne"), 50));
+            sistema.agregarPedido(LocalDate.now(), "Festival Primavera 2025", "FT99999999", itemsPrimavera);
+            System.out.println("Pedido para FT99999999 en Festival Primavera 2025 agregado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al agregar pedido: " + e.getMessage());
         }
 
         // 4. Agregar Pedido 3 (fecha = hace 5 días)
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
-            List<ItemPlatoPedido> items = new ArrayList<>();
-            items.add(new ItemPlatoPedido(ft.traerPlato("Pizza"), 1)); // Venta: 25000, Costo: 10000
+            List<ItemPlatoPedido> items2 = new ArrayList<>();
+            items2.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 1)); // Venta: 25000, Costo: 10000
             
-            sistema.agregarPedido(LocalDate.now().minusDays(5), "Festival Verano 2025", "FT12345678", items);
+            sistema.agregarPedido(LocalDate.now().minusDays(5), "Festival Verano 2025", "FT12345678", items2);
             System.out.println("Pedido de hace 5 días agregado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al agregar pedido del pasado: " + e.getMessage());
@@ -296,8 +311,7 @@ public class MainTest {
 
         // 5. Calcular la Rentabilidad Neta (CU 8) - Todos los pedidos
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
-            double rentabilidadTotal = ft.calcularRentabilidadNeta(sistema.getLstPedidos());
+            double rentabilidadTotal = sistema.traerUnidad("FT12345678").calcularRentabilidadNeta(sistema.getLstPedidos());
             System.out.println("Rentabilidad Neta Total (CU 8): $" + rentabilidadTotal);
         } catch (Exception e) {
             System.err.println("Error al calcular rentabilidad total: " + e.getMessage());
@@ -306,10 +320,9 @@ public class MainTest {
         // 6. Calcular la Rentabilidad Neta entre dos fechas (CU 9)
         // Rango A: incluye solo hoy y ayer (excluye el de hace 5 días)
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
             LocalDate desde = LocalDate.now().minusDays(1);
             LocalDate hasta = LocalDate.now().plusDays(1);
-            double rentabilidadRangoA = ft.calcularRentabilidadNeta(sistema.getLstPedidos(), desde, hasta);
+            double rentabilidadRangoA = sistema.traerUnidad("FT12345678").calcularRentabilidadNeta(sistema.getLstPedidos(), desde, hasta);
             System.out.println("Rentabilidad Neta Rango A (hoy +/- 1 día) (CU 9): $" + rentabilidadRangoA);
         } catch (Exception e) {
             System.err.println("Error al calcular rentabilidad Rango A: " + e.getMessage());
@@ -317,13 +330,40 @@ public class MainTest {
 
         // Rango B: incluye todo (hace 10 días a hoy + 1)
         try {
-            UnidadDeVenta ft = sistema.traerUnidad("FT12345678");
-            LocalDate desde = LocalDate.now().minusDays(10);
-            LocalDate hasta = LocalDate.now().plusDays(1);
-            double rentabilidadRangoB = ft.calcularRentabilidadNeta(sistema.getLstPedidos(), desde, hasta);
+            LocalDate desde2 = LocalDate.now().minusDays(10);
+            LocalDate hasta2 = LocalDate.now().plusDays(1);
+            double rentabilidadRangoB = sistema.traerUnidad("FT12345678").calcularRentabilidadNeta(sistema.getLstPedidos(), desde2, hasta2);
             System.out.println("Rentabilidad Neta Rango B (hace 10 días a hoy) (CU 9): $" + rentabilidadRangoB);
         } catch (Exception e) {
             System.err.println("Error al calcular rentabilidad Rango B: " + e.getMessage());
+        }
+
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 10: RANKING DE UNIDADES");
+        System.out.println("=========================================================");
+        try {
+            
+            
+                System.out.println("Ranking de Unidades para 'Festival Verano 2025':");
+                List<UnidadDeVenta> ranking = sistema.rankingUnidad(sistema.traerFestival("Festival Verano 2025"));
+                for (UnidadDeVenta u : ranking) {
+                    double rec = u.calcularRecaudacion(sistema.getLstPedidos(), sistema.traerFestival("Festival Verano 2025"));
+                    System.out.println(u.getNombreComercial() + " (" + u.getCodigo() + ") - Recaudación: $" + rec);
+                }
+
+                System.out.println("\nRanking de Unidades General (todos los festivales):");
+                List<UnidadDeVenta> rankingGral = sistema.rankingUnidades();
+                for (UnidadDeVenta u : rankingGral) {
+                    double rec = u.calcularRecaudacion(sistema.getLstPedidos());
+                    System.out.println(u.getNombreComercial() + " (" + u.getCodigo() + ") - Recaudación General: $" + rec);
+                }
+            
+
+            // Error esperado: Festival inexistente
+            System.out.println("\nProbando ranking con festival inexistente (debe lanzar excepción):");
+            sistema.rankingUnidad(null);
+        } catch (Exception e) {
+            System.err.println("Error esperado (Festival inexistente): " + e.getMessage());
         }
 
         System.out.println("\n=========================================================");
