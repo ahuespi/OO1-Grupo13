@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Sistema {
@@ -21,7 +20,7 @@ public class Sistema {
     // CASO DE USO 1: ALTAS
     // =========================================================
 
-    public boolean agregarFestival(String nombre, String temporada, Date fechaInicio, Date fechaFin,
+    public boolean agregarFestival(String nombre, String temporada, LocalDate fechaInicio, LocalDate fechaFin,
                                    double costoSuperficie, double costoMontaje,
                                    double plusElectricidad, double sueldoBase) throws Exception {
 

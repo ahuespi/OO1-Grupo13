@@ -1,26 +1,28 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Festival {
     private int id;
     private String nombre;
     private String temporada;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private double costoSuperficie;
     private double costoMontaje;
     private double plusElectricidad;
     private double sueldoBase;
     private double precio;
+    private double costo;
     private List<UnidadDeVenta> unidades;
 
     public Festival() {
         this.precio = 0.0;
+        this.costo = 0.0;
         this.unidades = new ArrayList<>(); // FIX: Constructor vacio con ArrayList (Regla 3)
     }
 
-    public Festival(int id, String nombre, String temporada, Date fechaInicio, Date fechaFin,
+    public Festival(int id, String nombre, String temporada, LocalDate fechaInicio, LocalDate fechaFin,
                     double costoSuperficie, double costoMontaje, double plusElectricidad,
                     double sueldoBase) throws Exception {
         this();
@@ -62,20 +64,20 @@ public class Festival {
         this.temporada = temporada;
     }
 
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) throws Exception {
+    public void setFechaInicio(LocalDate fechaInicio) throws Exception {
         if (fechaInicio == null) throw new Exception("Error: La fecha de inicio no puede ser nula"); // FIX: Validación (Regla 11)
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) throws Exception {
+    public void setFechaFin(LocalDate fechaFin) throws Exception {
         if (fechaFin == null) throw new Exception("Error: La fecha de fin no puede ser nula"); // FIX: Validación (Regla 11)
         this.fechaFin = fechaFin;
     }
@@ -123,6 +125,15 @@ public class Festival {
     public void setPrecio(double precio) throws Exception {
         if (precio < 0) throw new Exception("Error: El precio no puede ser negativo"); // FIX: Validación (Regla 11)
         this.precio = precio;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) throws Exception {
+        if (costo < 0) throw new Exception("Error: El costo no puede ser negativo");
+        this.costo = costo;
     }
 
     public List<UnidadDeVenta> getUnidades() {
@@ -173,6 +184,8 @@ public class Festival {
                 ", costoMontaje=" + costoMontaje +
                 ", plusElectricidad=" + plusElectricidad +
                 ", sueldoBase=" + sueldoBase +
+                ", precio=" + precio +
+                ", costo=" + costo +
                 ", unidades=" + unidades +
                 ')';
     }

@@ -1,7 +1,4 @@
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainTest {
@@ -87,8 +84,8 @@ public class MainTest {
 
         System.out.println("\n--- 1.2 ALTAS: FESTIVALES ---");
         try {
-            Date inicioVerano = crearFecha(2025, Calendar.JANUARY, 10);
-            Date finVerano    = crearFecha(2025, Calendar.JANUARY, 20);
+            LocalDate inicioVerano = LocalDate.of(2025, 1, 10);
+            LocalDate finVerano    = LocalDate.of(2025, 1, 20);
             sistema.agregarFestival(
                     "Festival Verano 2025", "Verano",
                     inicioVerano, finVerano,
@@ -96,8 +93,8 @@ public class MainTest {
             );
             System.out.println("Festival 'Festival Verano 2025' agregado correctamente.");
 
-            Date inicioInvierno = crearFecha(2025, Calendar.JULY, 5);
-            Date finInvierno    = crearFecha(2025, Calendar.JULY, 15);
+            LocalDate inicioInvierno = LocalDate.of(2025, 7, 5);
+            LocalDate finInvierno    = LocalDate.of(2025, 7, 15);
             sistema.agregarFestival(
                     "Festival Invierno 2025", "Invierno",
                     inicioInvierno, finInvierno,
@@ -105,8 +102,8 @@ public class MainTest {
             );
             System.out.println("Festival 'Festival Invierno 2025' agregado correctamente.");
 
-            Date inicioPrimavera = crearFecha(2025, Calendar.SEPTEMBER, 21);
-            Date finPrimavera    = crearFecha(2025, Calendar.SEPTEMBER, 30);
+            LocalDate inicioPrimavera = LocalDate.of(2025, 9, 21);
+            LocalDate finPrimavera    = LocalDate.of(2025, 9, 30);
             sistema.agregarFestival(
                     "Festival Primavera 2025", "Primavera",
                     inicioPrimavera, finPrimavera,
@@ -509,7 +506,7 @@ public class MainTest {
             }
 
             try {
-                Festival festivalInexistente = new Festival(99, "Inexistente", "Otoño", new Date(), new Date(), 0, 0, 0, 0);
+                Festival festivalInexistente = new Festival(99, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0);
                 sistema.auditoriaPersonalFestival(festivalInexistente);
             } catch (Exception e) {
                 System.out.println("Error esperado (festival inexistente): " + e.getMessage());
@@ -524,8 +521,8 @@ public class MainTest {
         System.out.println("=========================================================");
         try {
             // Creamos un nuevo festival de prueba para no alterar el flujo de los anteriores
-            Date inicioTest = crearFecha(2026, Calendar.JANUARY, 1);
-            Date finTest    = crearFecha(2026, Calendar.JANUARY, 10);
+            LocalDate inicioTest = LocalDate.of(2026, 1, 1);
+            LocalDate finTest    = LocalDate.of(2026, 1, 10);
             sistema.agregarFestival("Festival Canon 2026", "Verano", inicioTest, finTest, 1000.0, 10.0, 500.0, 50000.0);
             Festival fest = sistema.traerFestival("Festival Canon 2026");
 
@@ -563,8 +560,8 @@ public class MainTest {
             }
 
             System.out.println("\n--- 13.2 CASO CON MENOS DE 3 UNIDADES ---");
-            Date inicioTestPocos = crearFecha(2026, Calendar.FEBRUARY, 1);
-            Date finTestPocos    = crearFecha(2026, Calendar.FEBRUARY, 5);
+            LocalDate inicioTestPocos = LocalDate.of(2026, 2, 1);
+            LocalDate finTestPocos    = LocalDate.of(2026, 2, 5);
             sistema.agregarFestival("Festival Canon Pocos", "Verano", inicioTestPocos, finTestPocos, 1000.0, 10.0, 500.0, 50000.0);
             Festival festPocos = sistema.traerFestival("Festival Canon Pocos");
             // Le agregamos solo 2 unidades
@@ -584,7 +581,7 @@ public class MainTest {
             }
 
             try {
-                Festival festInexistente = new Festival(999, "Inexistente", "Otoño", new Date(), new Date(), 0, 0, 0, 0);
+                Festival festInexistente = new Festival(999, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0);
                 sistema.reporteMayoresCanon(festInexistente);
             } catch (Exception e) {
                 System.out.println("Error esperado (festival inexistente): " + e.getMessage());
@@ -605,13 +602,4 @@ public class MainTest {
         System.out.println("Personal:   " + sistema.getLstPersonal().size());
         System.out.println("Pedidos:    " + sistema.getLstPedidos().size());
     }
-    
-    private static Date crearFecha(int anio, int mes, int dia) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(anio, mes, dia, 0, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-    
-    
 }
