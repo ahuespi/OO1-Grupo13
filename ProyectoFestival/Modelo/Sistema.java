@@ -328,6 +328,50 @@ public class Sistema {
         return ranking;
     }
     
+    // =========================================================
+    // CASO DE USO 11: PLATO ESTRELLA
+    // =========================================================
+    public Plato platoEstrella(Festival festival, UnidadDeVenta unidad) throws Exception {
+        if (festival == null || !lstFestivales.contains(festival)) {
+            throw new Exception("Error: el festival no existe en el sistema.");
+        }
+        if (unidad == null || !lstUnidades.contains(unidad)) {
+            throw new Exception("Error: la unidad de venta no existe en el sistema.");
+        }
+
+        java.util.Map<String, Integer> platoCantidades = new java.util.HashMap<>();
+        java.util.Map<String, Plato> platoObjetos = new java.util.HashMap<>();
+
+        for (Pedido pedido : lstPedidos) {
+            if (pedido.getFestival().equals(festival) && pedido.getUnidad().equals(unidad)) {
+                for (ItemPlatoPedido item : pedido.getItems()) {
+                    Plato plato = item.getPlato();
+                    if (plato != null && plato.getNombre() != null) {
+                        String nombre = plato.getNombre();
+                        int cantidad = item.getCantidad();
+                        platoCantidades.put(nombre, platoCantidades.getOrDefault(nombre, 0) + cantidad);
+                        platoObjetos.put(nombre, plato);
+                    }
+                }
+            }
+        }
+
+        String nombreEstrella = null;
+        int maxCantidad = -1;
+
+        for (java.util.Map.Entry<String, Integer> entry : platoCantidades.entrySet()) {
+            if (entry.getValue() > maxCantidad) {
+                maxCantidad = entry.getValue();
+                nombreEstrella = entry.getKey();
+            }
+        }
+
+        return nombreEstrella != null ? platoObjetos.get(nombreEstrella) : null;
+    }
+
+    public Plato platoEstrella(UnidadDeVenta unidad, Festival festival) throws Exception {
+        return platoEstrella(festival, unidad);
+    }
     
     // =========================================================
     // GETTERS Y SETTERS

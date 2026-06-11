@@ -367,6 +367,47 @@ public class MainTest {
         }
 
         System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 11: PLATO ESTRELLA");
+        System.out.println("=========================================================");
+        try {
+            System.out.println("--- 11.1 CASO EXITOSO ---");
+            Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
+            UnidadDeVenta ftNorte = sistema.traerUnidad("FT12345678");
+            
+            Plato estrella = sistema.platoEstrella(festivalVerano, ftNorte);
+            System.out.println("Plato estrella de 'Food Truck Norte' en 'Festival Verano 2025': " 
+                    + (estrella != null ? estrella.getNombre() : "Ninguno"));
+
+            UnidadDeVenta ftSur = sistema.traerUnidad("FT99999999");
+            Festival festivalPrimavera = sistema.traerFestival("Festival Primavera 2025");
+            Plato estrellaSur = sistema.platoEstrella(ftSur, festivalPrimavera);
+            System.out.println("Plato estrella de 'Food Truck Sur' en 'Festival Primavera 2025' (overload): " 
+                    + (estrellaSur != null ? estrellaSur.getNombre() : "Ninguno"));
+
+            System.out.println("\n--- 11.2 CASO SIN PEDIDOS ---");
+            UnidadDeVenta puestoOeste = sistema.traerUnidad("PD99999999");
+            Plato estrellaVacia = sistema.platoEstrella(festivalVerano, puestoOeste);
+            System.out.println("Plato estrella de 'Puesto Oeste' en 'Festival Verano 2025' (sin ventas): " 
+                    + (estrellaVacia != null ? estrellaVacia.getNombre() : "Ninguno (OK)"));
+
+            System.out.println("\n--- 11.3 CASOS DE ERROR (VALIDACIONES) ---");
+            try {
+                sistema.platoEstrella(null, ftNorte);
+            } catch (Exception e) {
+                System.out.println("Error esperado (festival null): " + e.getMessage());
+            }
+
+            try {
+                sistema.platoEstrella(festivalVerano, null);
+            } catch (Exception e) {
+                System.out.println("Error esperado (unidad null): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error inesperado en CU 11: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("\n=========================================================");
         System.out.println("CASO DE USO 1: ALTAS Y BAJAS (Prueba de Bajas)");
         System.out.println("=========================================================");
 
