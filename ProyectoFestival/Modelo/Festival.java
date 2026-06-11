@@ -12,6 +12,7 @@ public class Festival {
     private double costoMontaje;
     private double plusElectricidad;
     private double sueldoBase;
+    private double plusAntiguedad;
     private double precio;
     private double costo;
     private List<UnidadDeVenta> unidades;
@@ -24,7 +25,7 @@ public class Festival {
 
     public Festival(int id, String nombre, String temporada, LocalDate fechaInicio, LocalDate fechaFin,
                     double costoSuperficie, double costoMontaje, double plusElectricidad,
-                    double sueldoBase) throws Exception {
+                    double sueldoBase, double plusAntiguedad) throws Exception {
         this();
         this.setIdFestival(id);
         this.setNombre(nombre); // FIX: Validación (Regla 11)
@@ -35,6 +36,7 @@ public class Festival {
         this.setCostoMontaje(costoMontaje);
         this.setPlusElectricidad(plusElectricidad);
         this.setSueldoBase(sueldoBase);
+        this.setPlusAntiguedad(plusAntiguedad);
     }
 
     public int getIdFestival() {
@@ -118,6 +120,15 @@ public class Festival {
         this.sueldoBase = sueldoBase;
     }
 
+    public double getPlusAntiguedad() {
+        return plusAntiguedad;
+    }
+
+    public void setPlusAntiguedad(double plusAntiguedad) throws Exception {
+        if (plusAntiguedad < 0) throw new Exception("Error: El plus de antigüedad no puede ser negativo");
+        this.plusAntiguedad = plusAntiguedad;
+    }
+
     public double getPrecio() {
         return precio;
     }
@@ -184,6 +195,7 @@ public class Festival {
                 ", costoMontaje=" + costoMontaje +
                 ", plusElectricidad=" + plusElectricidad +
                 ", sueldoBase=" + sueldoBase +
+                ", plusAntiguedad=" + plusAntiguedad +
                 ", precio=" + precio +
                 ", costo=" + costo +
                 ", unidades=" + unidades +

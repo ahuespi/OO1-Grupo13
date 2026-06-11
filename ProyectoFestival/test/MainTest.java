@@ -89,7 +89,7 @@ public class MainTest {
             sistema.agregarFestival(
                     "Festival Verano 2025", "Verano",
                     inicioVerano, finVerano,
-                    500.0, 300.0, 150.0, 80000.0
+                    500.0, 300.0, 150.0, 80000.0, 5000.0
             );
             System.out.println("Festival 'Festival Verano 2025' agregado correctamente.");
 
@@ -98,7 +98,7 @@ public class MainTest {
             sistema.agregarFestival(
                     "Festival Invierno 2025", "Invierno",
                     inicioInvierno, finInvierno,
-                    450.0, 280.0, 0.0, 75000.0
+                    450.0, 280.0, 0.0, 75000.0, 5000.0
             );
             System.out.println("Festival 'Festival Invierno 2025' agregado correctamente.");
 
@@ -107,7 +107,7 @@ public class MainTest {
             sistema.agregarFestival(
                     "Festival Primavera 2025", "Primavera",
                     inicioPrimavera, finPrimavera,
-                    480.0, 290.0, 100.0, 78000.0
+                    480.0, 290.0, 100.0, 78000.0, 5000.0
             );
             System.out.println("Festival 'Festival Primavera 2025' agregado correctamente.");
 
@@ -115,7 +115,7 @@ public class MainTest {
             sistema.agregarFestival(
                     "Festival Verano 2025", "Verano",
                     inicioVerano, finVerano,
-                    500.0, 300.0, 150.0, 80000.0
+                    500.0, 300.0, 150.0, 80000.0, 5000.0
             );
         } catch (Exception e) {
             System.err.println("Error esperado (festival duplicado): " + e.getMessage());
@@ -199,10 +199,10 @@ public class MainTest {
         System.out.println("CASO DE USO 4: LIQUIDACIÓN DE HABERES");
         System.out.println("=========================================================");
         try {
-            double sueldoBaseVerano = sistema.traerFestival("Festival Verano 2025").getSueldoBase();
-            System.out.println("Sueldo de Cocinero (" + sistema.traerPersonal(30111222).getNombre() + " " + sistema.traerPersonal(30111222).getApellido() + "): $" + sistema.traerPersonal(30111222).calcularSueldo(sueldoBaseVerano));
+            Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
+            System.out.println("Sueldo de Cocinero (" + sistema.traerPersonal(30111222).getNombre() + " " + sistema.traerPersonal(30111222).getApellido() + "): $" + sistema.traerPersonal(30111222).calcularSueldo(festivalVerano));
 
-            System.out.println("Sueldo de Cajero (" + sistema.traerPersonal(28999333).getNombre() + " " + sistema.traerPersonal(28999333).getApellido() + "): $" + sistema.traerPersonal(28999333).calcularSueldo(sueldoBaseVerano));
+            System.out.println("Sueldo de Cajero (" + sistema.traerPersonal(28999333).getNombre() + " " + sistema.traerPersonal(28999333).getApellido() + "): $" + sistema.traerPersonal(28999333).calcularSueldo(festivalVerano));
         } catch (Exception e) {
             System.err.println("Error al calcular haberes: " + e.getMessage());
         }
@@ -507,7 +507,7 @@ public class MainTest {
             }
 
             try {
-                Festival festivalInexistente = new Festival(99, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0);
+                Festival festivalInexistente = new Festival(99, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0, 5000.0);
                 sistema.auditoriaPersonalFestival(festivalInexistente);
             } catch (Exception e) {
                 System.out.println("Error esperado (festival inexistente): " + e.getMessage());
@@ -524,7 +524,7 @@ public class MainTest {
             // Creamos un nuevo festival de prueba para no alterar el flujo de los anteriores
             LocalDate inicioTest = LocalDate.of(2026, 1, 1);
             LocalDate finTest    = LocalDate.of(2026, 1, 10);
-            sistema.agregarFestival("Festival Canon 2026", "Verano", inicioTest, finTest, 1000.0, 10.0, 500.0, 50000.0);
+            sistema.agregarFestival("Festival Canon 2026", "Verano", inicioTest, finTest, 1000.0, 10.0, 500.0, 50000.0, 5000.0);
             Festival fest = sistema.traerFestival("Festival Canon 2026");
 
             // Creamos 4 unidades
@@ -563,7 +563,7 @@ public class MainTest {
             System.out.println("\n--- 13.2 CASO CON MENOS DE 3 UNIDADES ---");
             LocalDate inicioTestPocos = LocalDate.of(2026, 2, 1);
             LocalDate finTestPocos    = LocalDate.of(2026, 2, 5);
-            sistema.agregarFestival("Festival Canon Pocos", "Verano", inicioTestPocos, finTestPocos, 1000.0, 10.0, 500.0, 50000.0);
+            sistema.agregarFestival("Festival Canon Pocos", "Verano", inicioTestPocos, finTestPocos, 1000.0, 10.0, 500.0, 50000.0, 5000.0);
             Festival festPocos = sistema.traerFestival("Festival Canon Pocos");
             // Le agregamos solo 2 unidades
             festPocos.agregarUnidad(ua);
@@ -582,7 +582,7 @@ public class MainTest {
             }
 
             try {
-                Festival festInexistente = new Festival(999, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0);
+                Festival festInexistente = new Festival(999, "Inexistente", "Otoño", LocalDate.now(), LocalDate.now(), 0, 0, 0, 0, 5000.0);
                 sistema.reporteMayoresCanon(festInexistente);
             } catch (Exception e) {
                 System.out.println("Error esperado (festival inexistente): " + e.getMessage());

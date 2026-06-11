@@ -3,9 +3,6 @@ import java.time.Period;
 
 public abstract class Personal {
 
-
-    protected static final double VALOR_ANIO_ANTIGUEDAD = 5000;
-
     private int id;
     private String nombre;
     private String apellido;
@@ -26,7 +23,7 @@ public abstract class Personal {
         this.setFechaIngreso(fechaIngreso);
     }
 
-    public abstract double calcularSueldo(double sueldoBase);
+    public abstract double calcularSueldo(Festival festival);
 
     public int calcularEdad() {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();

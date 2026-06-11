@@ -22,7 +22,7 @@ public class Sistema {
 
     public boolean agregarFestival(String nombre, String temporada, LocalDate fechaInicio, LocalDate fechaFin,
                                    double costoSuperficie, double costoMontaje,
-                                   double plusElectricidad, double sueldoBase) throws Exception {
+                                   double plusElectricidad, double sueldoBase, double plusAntiguedad) throws Exception {
 
         if (traerFestival(nombre) != null) {
             throw new Exception("Error: ya existe un festival con ese nombre");
@@ -31,7 +31,7 @@ public class Sistema {
         int id = generarIdFestival();
 
         return lstFestivales.add(new Festival(id, nombre, temporada, fechaInicio, fechaFin,
-                costoSuperficie, costoMontaje, plusElectricidad, sueldoBase));
+                costoSuperficie, costoMontaje, plusElectricidad, sueldoBase, plusAntiguedad));
     }
 
     public boolean agregarFoodTruck(String codigo, String nombreComercial, Personal responsable,

@@ -149,15 +149,16 @@ public abstract class UnidadDeVenta {
                     totalVentas += item.subtotalVenta();
                     totalCostos += item.subtotalCosto();
                 }
-                if (!festivalesInvolucrados.contains(p.getFestival())) {
-                    festivalesInvolucrados.add(p.getFestival());
-                }
+            }
+            Festival f = p.getFestival();
+            if (f != null && f.getUnidades().contains(this) && !festivalesInvolucrados.contains(f)) {
+                festivalesInvolucrados.add(f);
             }
         }
         
         for (Festival f : festivalesInvolucrados) {
             for (Personal p : lstPersonal) {
-                totalSueldos += p.calcularSueldo(f.getSueldoBase());
+                totalSueldos += p.calcularSueldo(f);
             }
             totalCanon += this.calcularCanon(f);
         }
@@ -174,23 +175,24 @@ public abstract class UnidadDeVenta {
         List<Festival> festivalesInvolucrados = new ArrayList<>();
 
         for (Pedido p : pedidos) {
-            if (p.getUnidad().equals(this)) {              
-                LocalDate fecha = p.getFecha();
-                if ((fecha.isEqual(desde) || fecha.isAfter(desde)) && (fecha.isEqual(hasta) || fecha.isBefore(hasta))) {
+            LocalDate fecha = p.getFecha();
+            if ((fecha.isEqual(desde) || fecha.isAfter(desde)) && (fecha.isEqual(hasta) || fecha.isBefore(hasta))) {
+                if (p.getUnidad().equals(this)) {              
                     for (ItemPlatoPedido item : p.getItems()) {
                         totalVentas += item.subtotalVenta();
                         totalCostos += item.subtotalCosto();
                     }
-                    if (!festivalesInvolucrados.contains(p.getFestival())) {
-                        festivalesInvolucrados.add(p.getFestival());
-                    }
+                }
+                Festival f = p.getFestival();
+                if (f != null && f.getUnidades().contains(this) && !festivalesInvolucrados.contains(f)) {
+                    festivalesInvolucrados.add(f);
                 }
             }
         }
         
         for (Festival f : festivalesInvolucrados) {
             for (Personal p : lstPersonal) {
-                totalSueldos += p.calcularSueldo(f.getSueldoBase());
+                totalSueldos += p.calcularSueldo(f);
             }
             totalCanon += this.calcularCanon(f);
         }
