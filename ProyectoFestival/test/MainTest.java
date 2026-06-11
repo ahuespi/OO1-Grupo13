@@ -8,13 +8,11 @@ public class MainTest {
     public static void main(String[] args) {
         Sistema sistema = new Sistema();
 
-        // =========================================================
-        // CASO DE USO 1: Altas y Bajas:
-        // Métodos para agregar festivales, unidades y personal a las listas de
-        // la clase Sistema
-        // =========================================================
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 1: ALTAS Y BAJAS (Prueba de Altas)");
+        System.out.println("=========================================================");
 
-        System.out.println("=== ALTAS: PERSONAL ===");
+        System.out.println("\n--- 1.1 ALTAS: PERSONAL ---");
         try {
             sistema.agregarCocinero(
                     "Ana", "Gomez",
@@ -45,10 +43,10 @@ public class MainTest {
                     15000
             );
         } catch (Exception e) {
-            System.out.println("Error esperado (DNI duplicado): " + e.getMessage());
+            System.err.println("Error esperado (DNI duplicado): " + e.getMessage());
         }
 
-        System.out.println("\n=== ALTAS: FESTIVALES ===");
+        System.out.println("\n--- 1.2 ALTAS: FESTIVALES ---");
         try {
             Date inicioVerano = crearFecha(2025, Calendar.JANUARY, 10);
             Date finVerano    = crearFecha(2025, Calendar.JANUARY, 20);
@@ -75,10 +73,10 @@ public class MainTest {
                     500.0, 300.0, 150.0, 80000.0
             );
         } catch (Exception e) {
-            System.out.println("Error esperado (festival duplicado): " + e.getMessage());
+            System.err.println("Error esperado (festival duplicado): " + e.getMessage());
         }
 
-        System.out.println("\n=== ALTAS: UNIDADES DE VENTA ===");
+        System.out.println("\n--- 1.3 ALTAS: UNIDADES DE VENTA ---");
         try {
             Personal responsable = sistema.traerPersonal(30111222);
 
@@ -103,13 +101,12 @@ public class MainTest {
                     5, "XYZ999", false
             );
         } catch (Exception e) {
-            System.out.println("Error esperado (código duplicado): " + e.getMessage());
+            System.err.println("Error esperado (código duplicado): " + e.getMessage());
         }
 
-        // =========================================================
-        // PRUEBA: AGREGAR PLATOS A TRAVÉS DE SISTEMA (CON CONTROL DE DUPLICADOS)
-        // =========================================================
-        System.out.println("\n=== AGREGAR PLATOS A UNIDAD DESDE SISTEMA ===");
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 2: AGREGAR PLATOS A TRAVÉS DE SISTEMA");
+        System.out.println("=========================================================");
         try {
             Plato plato1 = new Plato(1, "Hamburguesa Doble", 5000.0, 2000.0);
             Plato plato2 = new Plato(2, "Papas Fritas", 2500.0, 1000.0);
@@ -129,14 +126,12 @@ public class MainTest {
                 System.out.println("No se encontró la unidad para agregar platos.");
             }
         } catch (Exception e) {
-            System.out.println("Error al agregar platos: " + e.getMessage());
+            System.err.println("Error al agregar platos: " + e.getMessage());
         }
 
-        // =========================================================
-        // CASO DE USO 3: CÁLCULO DE CANON
-        // =========================================================
-
-        System.out.println("\n=== CÁLCULO DE CANON ===");
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 3: CÁLCULO DE CANON");
+        System.out.println("=========================================================");
         try {
             UnidadDeVenta foodTruck = sistema.traerUnidad("FT12345678");
             if (foodTruck != null) {
@@ -148,14 +143,12 @@ public class MainTest {
                 System.out.println("Canon de Puesto Desarmable '" + puesto.getNombreComercial() + "': $" + puesto.calcularCanon());
             }
         } catch (Exception e) {
-            System.out.println("Error al calcular el canon: " + e.getMessage());
+            System.err.println("Error al calcular el canon: " + e.getMessage());
         }
 
-        // =========================================================
-        // CASO DE USO 4: LIQUIDACIÓN DE HABERES
-        // =========================================================
-
-        System.out.println("\n=== LIQUIDACIÓN DE HABERES ===");
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 4: LIQUIDACIÓN DE HABERES");
+        System.out.println("=========================================================");
         try {
             Personal cocinero = sistema.traerPersonal(30111222);
             if (cocinero != null) {
@@ -167,14 +160,12 @@ public class MainTest {
                 System.out.println("Sueldo de Cajero (" + cajero.getNombre() + " " + cajero.getApellido() + "): $" + cajero.calcularSueldo());
             }
         } catch (Exception e) {
-            System.out.println("Error al calcular haberes: " + e.getMessage());
+            System.err.println("Error al calcular haberes: " + e.getMessage());
         }
 
-        // =========================================================
-        // CASO DE USO 5: REGISTRO DE PEDIDO VALIDADO Y AGREGADO DE ITEMS
-        // =========================================================
-
-        System.out.println("\n=== REGISTRO DE PEDIDO VALIDADO ===");
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 5: REGISTRO DE PEDIDO VALIDADO Y AGREGADO DE ITEMS");
+        System.out.println("=========================================================");
         try {
             // 1. Registramos el pedido vacío (solo con sus datos principales)
             sistema.agregarPedido(
@@ -212,7 +203,7 @@ public class MainTest {
                     "FT12345678"
             );
         } catch (Exception e) {
-            System.out.println("Error esperado (Festival inexistente): " + e.getMessage());
+            System.err.println("Error esperado (Festival inexistente): " + e.getMessage());
         }
         
         try {
@@ -223,14 +214,12 @@ public class MainTest {
                     "INVENTADO1"
             );
         } catch (Exception e) {
-            System.out.println("Error esperado (Unidad inexistente): " + e.getMessage());
+            System.err.println("Error esperado (Unidad inexistente): " + e.getMessage());
         }
 
-        // =========================================================
-        // CASO DE USO 6: REPORTE DE RECAUDACIÓN
-        // =========================================================
-
-        System.out.println("\n=== REPORTE DE RECAUDACIÓN ===");
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 6: REPORTE DE RECAUDACIÓN");
+        System.out.println("=========================================================");
         try {
             Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
             if (festivalVerano != null) {
@@ -246,11 +235,14 @@ public class MainTest {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error al generar el reporte: " + e.getMessage());
+            System.err.println("Error al generar el reporte: " + e.getMessage());
         }
 
+        System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 1: ALTAS Y BAJAS (Prueba de Bajas)");
+        System.out.println("=========================================================");
 
-        System.out.println("\n=== BAJAS: ELIMINAR UNIDAD ===");
+        System.out.println("\n--- BAJAS: ELIMINAR UNIDAD ---");
         try {
             sistema.eliminarUnidad("PD12345678");
             System.out.println("Unidad 'PD12345678' eliminada correctamente.");
@@ -258,10 +250,10 @@ public class MainTest {
             // Error esperado: unidad inexistente
             sistema.eliminarUnidad("PD12345678");
         } catch (Exception e) {
-            System.out.println("Error esperado (unidad inexistente): " + e.getMessage());
+            System.err.println("Error esperado (unidad inexistente): " + e.getMessage());
         }
 
-        System.out.println("\n=== BAJAS: ELIMINAR PERSONAL ===");
+        System.out.println("\n--- BAJAS: ELIMINAR PERSONAL ---");
         try {
             sistema.eliminarPersonal(28999333);
             System.out.println("Personal con DNI 28999333 eliminado correctamente.");
@@ -269,10 +261,10 @@ public class MainTest {
             // Error esperado: personal inexistente
             sistema.eliminarPersonal(28999333);
         } catch (Exception e) {
-            System.out.println("Error esperado (personal inexistente): " + e.getMessage());
+            System.err.println("Error esperado (personal inexistente): " + e.getMessage());
         }
 
-        System.out.println("\n=== BAJAS: ELIMINAR FESTIVAL ===");
+        System.out.println("\n--- BAJAS: ELIMINAR FESTIVAL ---");
         try {
             sistema.eliminarFestival("Festival Invierno 2025");
             System.out.println("Festival 'Festival Invierno 2025' eliminado correctamente.");
@@ -280,16 +272,20 @@ public class MainTest {
             // Error esperado: festival inexistente
             sistema.eliminarFestival("Festival Invierno 2025");
         } catch (Exception e) {
-            System.out.println("Error esperado (festival inexistente): " + e.getMessage());
+            System.err.println("Error esperado (festival inexistente): " + e.getMessage());
         }
 
-        System.out.println("\n=== ESTADO FINAL DEL SISTEMA ===");
+        System.out.println("\n=========================================================");
+        System.out.println("EXTRAS: ESTADO FINAL DEL SISTEMA Y FILTRADO");
+        System.out.println("=========================================================");
+
+        System.out.println("\n--- ESTADO FINAL DEL SISTEMA ---");
         System.out.println("Festivales: " + sistema.getLstFestivales().size());
         System.out.println("Unidades:   " + sistema.getLstUnidades().size());
         System.out.println("Personal:   " + sistema.getLstPersonal().size());
         System.out.println("Pedidos:    " + sistema.getLstPedidos().size());
         
-        System.out.println("\n### FILTRAR PERSONAL POR EDAD###");
+        System.out.println("\n--- FILTRAR PERSONAL POR EDAD ---");
         System.out.println(sistema.filtroPersonalPorEdad(LocalDate.of(1990, 1, 1), LocalDate.of(1991, 12, 31)));
     }
     
