@@ -53,6 +53,25 @@ public class MainTest {
             );
             System.out.println("Cajero adicional agregado correctamente.");
 
+            sistema.agregarCajero(
+                    "Juan", "Perez",
+                    34111222,
+                    LocalDate.of(1991, 7, 15),
+                    LocalDate.of(2020, 1, 1),
+                    "mañana"
+            );
+            System.out.println("Cajero adicional (para CU 7) agregado correctamente.");
+
+            sistema.agregarCocinero(
+                    "Maria", "Rodriguez",
+                    35111222,
+                    LocalDate.of(1990, 12, 5),
+                    LocalDate.of(2021, 2, 1),
+                    "Pasteleria",
+                    22000
+            );
+            System.out.println("Cocinera adicional (para CU 7) agregada correctamente.");
+
             // Error esperado: DNI duplicado
             sistema.agregarCocinero(
                     "Otro", "Nombre",
@@ -149,22 +168,19 @@ public class MainTest {
         System.out.println("CASO DE USO 2: AGREGAR PLATOS A TRAVÉS DE SISTEMA");
         System.out.println("=========================================================");
         try {
-            Plato plato1 = new Plato(1, "Hamburguesa Doble", 5000.0, 2000.0);
-            Plato plato2 = new Plato(2, "Papas Fritas", 2500.0, 1000.0);
-            Plato plato1Duplicado = new Plato(3, "Hamburguesa Doble", 6000.0, 2500.0);
-
-            // 2. Pasamos el objeto UnidadDeVenta al método del Sistema
-            System.out.println("Agregando: " + plato1.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1, sistema.traerUnidad("FT12345678")));
-            System.out.println("Agregando: " + plato2.getNombre() + " a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato2, sistema.traerUnidad("FT12345678")));
-            System.out.println("Agregando: " + plato1Duplicado.getNombre() + " (duplicado) a FT12345678 -> " + sistema.agregarPlatoAUnidad(plato1Duplicado, sistema.traerUnidad("FT12345678")));
+            System.out.println("Agregando: Hamburguesa Doble a FT12345678 -> " + sistema.agregarPlato("FT12345678", "Hamburguesa Doble", 5000.0, 2000.0));
+            System.out.println("Agregando: Papas Fritas a FT12345678 -> " + sistema.agregarPlato("FT12345678", "Papas Fritas", 2500.0, 1000.0));
+            try {
+                System.out.println("Agregando: Hamburguesa Doble (duplicado) a FT12345678 -> " + sistema.agregarPlato("FT12345678", "Hamburguesa Doble", 6000.0, 2500.0));
+            } catch (Exception e) {
+                System.out.println("Error esperado (Plato duplicado): " + e.getMessage());
+            }
 
             System.out.println("Platos en " + sistema.traerUnidad("FT12345678").getNombreComercial() + ": " + sistema.traerUnidad("FT12345678").getLstPlatos().size());
 
             // Agregar platos a la nueva unidad FT99999999 y PD99999999
-            Plato taco = new Plato(4, "Tacos de Carne", 4000.0, 1800.0);
-            Plato empanada = new Plato(5, "Empanada Criolla", 1200.0, 500.0);
-            System.out.println("Agregando: " + taco.getNombre() + " a FT99999999 -> " + sistema.agregarPlatoAUnidad(taco, sistema.traerUnidad("FT99999999")));
-            System.out.println("Agregando: " + empanada.getNombre() + " a PD99999999 -> " + sistema.agregarPlatoAUnidad(empanada, sistema.traerUnidad("PD99999999")));
+            System.out.println("Agregando: Tacos de Carne a FT99999999 -> " + sistema.agregarPlato("FT99999999", "Tacos de Carne", 4000.0, 1800.0));
+            System.out.println("Agregando: Empanada Criolla a PD99999999 -> " + sistema.agregarPlato("PD99999999", "Empanada Criolla", 1200.0, 500.0));
         } catch (Exception e) {
             System.err.println("Error al agregar platos: " + e.getMessage());
         }
@@ -206,11 +222,11 @@ public class MainTest {
             System.out.println("Pedido registrado correctamente con Festival y Unidad válidos.");
             
             // 2. Traemos el pedido recién creado (el ID 1 por ser el primero)
-            // 3. Agregamos el plato al pedido usando el método de la clase Pedido
-            sistema.traerPedido(1).agregarPlato(sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa Doble"), 2);
+            // 3. Agregamos el plato al pedido usando el método de la clase Sistema
+            sistema.agregarItemAPedido(1, sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa Doble"), 2);
             System.out.println("Se agregaron 2 " + sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa Doble").getNombre() + " al pedido ID " + sistema.traerPedido(1).getIdPedido());
             
-            sistema.traerPedido(1).agregarPlato(sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 1);
+            sistema.agregarItemAPedido(1, sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 1);
             System.out.println("Se agregaron 1 " + sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas").getNombre() + " al pedido ID " + sistema.traerPedido(1).getIdPedido());
             
             System.out.println("Monto total del pedido: $" + sistema.traerPedido(1).calcularMontoTotal());
@@ -253,6 +269,21 @@ public class MainTest {
         }
 
         System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 7: FILTRAR PERSONAL POR EDAD");
+        System.out.println("=========================================================");
+        try {
+            LocalDate fechaDesde = LocalDate.of(1990, 1, 1);
+            LocalDate fechaHasta = LocalDate.of(1991, 12, 31);
+            System.out.println("Personal nacido entre " + fechaDesde + " y " + fechaHasta + ":");
+            List<Personal> filtrados = sistema.filtroPersonalPorEdad(fechaDesde, fechaHasta);
+            for (Personal p : filtrados) {
+                System.out.println("- " + p.getNombre() + " " + p.getApellido() + " (F. Nac: " + p.getFechaNacimiento() + ")");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al filtrar personal por edad: " + e.getMessage());
+        }
+
+        System.out.println("\n=========================================================");
         System.out.println("CASO DE USO 8 y 9: CÁLCULO DE RENTABILIDAD NETA");
         System.out.println("=========================================================");
         
@@ -279,20 +310,21 @@ public class MainTest {
         
         // 3. Agregar Pedido 2 (fecha = hoy) con los items descritos por el compañero
         try {
-            List<ItemPlatoPedido> items = new ArrayList<>();
-            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa"), 13));
-            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 22));
-            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 5));
-            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Rabas"), 10));
-            items.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Cornalitos"), 7));
+            sistema.agregarPedido(LocalDate.now(), "Festival Verano 2025", "FT12345678");
+            int idPedido2 = sistema.getLstPedidos().size();
+            sistema.agregarItemAPedido(idPedido2, sistema.traerUnidad("FT12345678").traerPlato("Hamburguesa"), 13);
+            sistema.agregarItemAPedido(idPedido2, sistema.traerUnidad("FT12345678").traerPlato("Papas Fritas"), 22);
+            sistema.agregarItemAPedido(idPedido2, sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 5);
+            sistema.agregarItemAPedido(idPedido2, sistema.traerUnidad("FT12345678").traerPlato("Rabas"), 10);
+            sistema.agregarItemAPedido(idPedido2, sistema.traerUnidad("FT12345678").traerPlato("Cornalitos"), 7);
             
-            sistema.agregarPedido(LocalDate.now(), "Festival Verano 2025", "FT12345678", items);
             System.out.println("Pedido de hoy con items agregado correctamente.");
 
             // Agregar pedido para la nueva unidad en Festival Primavera 2025
-            List<ItemPlatoPedido> itemsPrimavera = new ArrayList<>();
-            itemsPrimavera.add(new ItemPlatoPedido(sistema.traerUnidad("FT99999999").traerPlato("Tacos de Carne"), 50));
-            sistema.agregarPedido(LocalDate.now(), "Festival Primavera 2025", "FT99999999", itemsPrimavera);
+            sistema.agregarPedido(LocalDate.now(), "Festival Primavera 2025", "FT99999999");
+            int idPedidoPrimavera = sistema.getLstPedidos().size();
+            sistema.agregarItemAPedido(idPedidoPrimavera, sistema.traerUnidad("FT99999999").traerPlato("Tacos de Carne"), 50);
+            
             System.out.println("Pedido para FT99999999 en Festival Primavera 2025 agregado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al agregar pedido: " + e.getMessage());
@@ -300,10 +332,10 @@ public class MainTest {
 
         // 4. Agregar Pedido 3 (fecha = hace 5 días)
         try {
-            List<ItemPlatoPedido> items2 = new ArrayList<>();
-            items2.add(new ItemPlatoPedido(sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 1)); // Venta: 25000, Costo: 10000
+            sistema.agregarPedido(LocalDate.now().minusDays(5), "Festival Verano 2025", "FT12345678");
+            int idPedidoPasado = sistema.getLstPedidos().size();
+            sistema.agregarItemAPedido(idPedidoPasado, sistema.traerUnidad("FT12345678").traerPlato("Pizza"), 1); // Venta: 25000, Costo: 10000
             
-            sistema.agregarPedido(LocalDate.now().minusDays(5), "Festival Verano 2025", "FT12345678", items2);
             System.out.println("Pedido de hace 5 días agregado correctamente.");
         } catch (Exception e) {
             System.err.println("Error al agregar pedido del pasado: " + e.getMessage());
@@ -572,9 +604,6 @@ public class MainTest {
         System.out.println("Unidades:   " + sistema.getLstUnidades().size());
         System.out.println("Personal:   " + sistema.getLstPersonal().size());
         System.out.println("Pedidos:    " + sistema.getLstPedidos().size());
-        
-        System.out.println("\n--- FILTRAR PERSONAL POR EDAD ---");
-        System.out.println(sistema.filtroPersonalPorEdad(LocalDate.of(1990, 1, 1), LocalDate.of(1991, 12, 31)));
     }
     
     private static Date crearFecha(int anio, int mes, int dia) {

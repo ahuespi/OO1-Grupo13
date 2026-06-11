@@ -17,29 +17,30 @@ public class Festival {
 
     public Festival() {
         this.precio = 0.0;
-        this.unidades = new ArrayList<>();
+        this.unidades = new ArrayList<>(); // FIX: Constructor vacio con ArrayList (Regla 3)
     }
 
     public Festival(int id, String nombre, String temporada, Date fechaInicio, Date fechaFin,
                     double costoSuperficie, double costoMontaje, double plusElectricidad,
-                    double sueldoBase) {
-        this.id = id;
-        this.nombre = nombre;
-        this.temporada = temporada;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.costoSuperficie = costoSuperficie;
-        this.costoMontaje = costoMontaje;
-        this.plusElectricidad = plusElectricidad;
-        this.sueldoBase = sueldoBase;
-        this.unidades = new ArrayList<>();
+                    double sueldoBase) throws Exception {
+        this();
+        this.setIdFestival(id);
+        this.setNombre(nombre); // FIX: Validación (Regla 11)
+        this.setTemporada(temporada);
+        this.setFechaInicio(fechaInicio);
+        this.setFechaFin(fechaFin);
+        this.setCostoSuperficie(costoSuperficie);
+        this.setCostoMontaje(costoMontaje);
+        this.setPlusElectricidad(plusElectricidad);
+        this.setSueldoBase(sueldoBase);
     }
 
     public int getIdFestival() {
         return id;
     }
 
-    public void setIdFestival(int id) {
+    public void setIdFestival(int id) throws Exception {
+        if (id < 0) throw new Exception("Error: El ID no puede ser negativo"); // FIX: Validación (Regla 11)
         this.id = id;
     }
 
@@ -47,7 +48,8 @@ public class Festival {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre) throws Exception {
+        if (nombre == null || nombre.trim().isEmpty()) throw new Exception("Error: El nombre no puede estar vacío"); // FIX: Validación (Regla 11)
         this.nombre = nombre;
     }
 
@@ -55,7 +57,8 @@ public class Festival {
         return temporada;
     }
 
-    public void setTemporada(String temporada) {
+    public void setTemporada(String temporada) throws Exception {
+        if (temporada == null || temporada.trim().isEmpty()) throw new Exception("Error: La temporada no puede estar vacía"); // FIX: Validación (Regla 11)
         this.temporada = temporada;
     }
 
@@ -63,7 +66,8 @@ public class Festival {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) throws Exception {
+        if (fechaInicio == null) throw new Exception("Error: La fecha de inicio no puede ser nula"); // FIX: Validación (Regla 11)
         this.fechaInicio = fechaInicio;
     }
 
@@ -71,7 +75,8 @@ public class Festival {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(Date fechaFin) throws Exception {
+        if (fechaFin == null) throw new Exception("Error: La fecha de fin no puede ser nula"); // FIX: Validación (Regla 11)
         this.fechaFin = fechaFin;
     }
 
@@ -79,7 +84,8 @@ public class Festival {
         return costoSuperficie;
     }
 
-    public void setCostoSuperficie(double costoSuperficie) {
+    public void setCostoSuperficie(double costoSuperficie) throws Exception {
+        if (costoSuperficie < 0) throw new Exception("Error: El costo no puede ser negativo"); // FIX: Validación (Regla 11)
         this.costoSuperficie = costoSuperficie;
     }
 
@@ -87,7 +93,8 @@ public class Festival {
         return costoMontaje;
     }
 
-    public void setCostoMontaje(double costoMontaje) {
+    public void setCostoMontaje(double costoMontaje) throws Exception {
+        if (costoMontaje < 0) throw new Exception("Error: El costo no puede ser negativo"); // FIX: Validación (Regla 11)
         this.costoMontaje = costoMontaje;
     }
 
@@ -95,7 +102,8 @@ public class Festival {
         return plusElectricidad;
     }
 
-    public void setPlusElectricidad(double plusElectricidad) {
+    public void setPlusElectricidad(double plusElectricidad) throws Exception {
+        if (plusElectricidad < 0) throw new Exception("Error: El plus no puede ser negativo"); // FIX: Validación (Regla 11)
         this.plusElectricidad = plusElectricidad;
     }
 
@@ -103,7 +111,8 @@ public class Festival {
         return sueldoBase;
     }
 
-    public void setSueldoBase(double sueldoBase) {
+    public void setSueldoBase(double sueldoBase) throws Exception {
+        if (sueldoBase < 0) throw new Exception("Error: El sueldo no puede ser negativo"); // FIX: Validación (Regla 11)
         this.sueldoBase = sueldoBase;
     }
 
@@ -111,7 +120,8 @@ public class Festival {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(double precio) throws Exception {
+        if (precio < 0) throw new Exception("Error: El precio no puede ser negativo"); // FIX: Validación (Regla 11)
         this.precio = precio;
     }
 
@@ -131,17 +141,23 @@ public class Festival {
         this.unidades.remove(u);
     }
 
+    // FIX: Sobrecarga de equals (Regla 13)
     @Override
     public boolean equals(Object obj) {
         boolean sonIguales = false;
-
         if (obj != null && obj instanceof Festival) {
-            Festival otro = (Festival) obj;
+            sonIguales = this.equals((Festival) obj);
+        }
+        return sonIguales;
+    }
+
+    public boolean equals(Festival otro) {
+        boolean sonIguales = false;
+        if (otro != null) {
             if (this.nombre != null && otro.getNombre() != null && this.nombre.equalsIgnoreCase(otro.getNombre())) {
                 sonIguales = true;
             }
         }
-
         return sonIguales;
     }
 

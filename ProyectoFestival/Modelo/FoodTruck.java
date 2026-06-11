@@ -7,8 +7,8 @@ public class FoodTruck extends UnidadDeVenta {
                      int superficieMetroCuadrado, String patente,
                      boolean requiereConexionElectrica) throws Exception {
         super(id, codigo, nombreComercial, responsable, superficieMetroCuadrado);
-        this.patente = patente;
-        this.requiereConexionElectrica = requiereConexionElectrica;
+        this.setPatente(patente); // FIX: Validación (Regla 11)
+        this.setRequiereConexionElectrica(requiereConexionElectrica);
     }
 
     @Override
@@ -19,14 +19,15 @@ public class FoodTruck extends UnidadDeVenta {
             canon += festival.getPlusElectricidad();
         }
 
-        return canon;
+        return canon; // FIX: Único retorno (Regla 7)
     }
 
     public String getPatente() {
         return patente;
     }
 
-    public void setPatente(String patente) {
+    public void setPatente(String patente) throws Exception {
+        if (patente == null || patente.trim().isEmpty()) throw new Exception("Error: La patente no puede estar vacía"); // FIX: Validación (Regla 11)
         this.patente = patente;
     }
 
@@ -36,6 +37,26 @@ public class FoodTruck extends UnidadDeVenta {
 
     public void setRequiereConexionElectrica(boolean requiereConexionElectrica) {
         this.requiereConexionElectrica = requiereConexionElectrica;
+    }
+
+    // FIX: Sobrecarga de equals (Regla 13)
+    @Override
+    public boolean equals(Object obj) {
+        boolean sonIguales = false;
+        if (obj != null && obj instanceof FoodTruck) {
+            sonIguales = this.equals((FoodTruck) obj);
+        }
+        return sonIguales;
+    }
+
+    public boolean equals(FoodTruck otro) {
+        boolean sonIguales = false;
+        if (otro != null) {
+            if (this.getCodigo() != null && this.getCodigo().equals(otro.getCodigo())) {
+                sonIguales = true;
+            }
+        }
+        return sonIguales;
     }
 
     @Override
