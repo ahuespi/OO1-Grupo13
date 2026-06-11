@@ -155,11 +155,10 @@ public abstract class UnidadDeVenta {
             }
         }
         
-        for (Personal p : lstPersonal) {
-            totalSueldos += p.calcularSueldo();
-        }
-        
         for (Festival f : festivalesInvolucrados) {
+            for (Personal p : lstPersonal) {
+                totalSueldos += p.calcularSueldo(f.getSueldoBase());
+            }
             totalCanon += this.calcularCanon(f);
         }
         
@@ -189,11 +188,10 @@ public abstract class UnidadDeVenta {
             }
         }
         
-        for (Personal p : lstPersonal) {
-            totalSueldos += p.calcularSueldo();
-        }
-        
         for (Festival f : festivalesInvolucrados) {
+            for (Personal p : lstPersonal) {
+                totalSueldos += p.calcularSueldo(f.getSueldoBase());
+            }
             totalCanon += this.calcularCanon(f);
         }
         

@@ -199,9 +199,10 @@ public class MainTest {
         System.out.println("CASO DE USO 4: LIQUIDACIÓN DE HABERES");
         System.out.println("=========================================================");
         try {
-            System.out.println("Sueldo de Cocinero (" + sistema.traerPersonal(30111222).getNombre() + " " + sistema.traerPersonal(30111222).getApellido() + "): $" + sistema.traerPersonal(30111222).calcularSueldo());
+            double sueldoBaseVerano = sistema.traerFestival("Festival Verano 2025").getSueldoBase();
+            System.out.println("Sueldo de Cocinero (" + sistema.traerPersonal(30111222).getNombre() + " " + sistema.traerPersonal(30111222).getApellido() + "): $" + sistema.traerPersonal(30111222).calcularSueldo(sueldoBaseVerano));
 
-            System.out.println("Sueldo de Cajero (" + sistema.traerPersonal(28999333).getNombre() + " " + sistema.traerPersonal(28999333).getApellido() + "): $" + sistema.traerPersonal(28999333).calcularSueldo());
+            System.out.println("Sueldo de Cajero (" + sistema.traerPersonal(28999333).getNombre() + " " + sistema.traerPersonal(28999333).getApellido() + "): $" + sistema.traerPersonal(28999333).calcularSueldo(sueldoBaseVerano));
         } catch (Exception e) {
             System.err.println("Error al calcular haberes: " + e.getMessage());
         }

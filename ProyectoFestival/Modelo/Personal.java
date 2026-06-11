@@ -3,7 +3,7 @@ import java.time.Period;
 
 public abstract class Personal {
 
-    protected static final double SUELDO_BASE = 100000;
+
     protected static final double VALOR_ANIO_ANTIGUEDAD = 5000;
 
     private int id;
@@ -26,7 +26,7 @@ public abstract class Personal {
         this.setFechaIngreso(fechaIngreso);
     }
 
-    public abstract double calcularSueldo();
+    public abstract double calcularSueldo(double sueldoBase);
 
     public int calcularEdad() {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();

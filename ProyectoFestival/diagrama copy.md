@@ -54,13 +54,13 @@ class UnidadDeVenta {
 
 class FoodTruck {
     -String patente
-    -boolean requiereConexion
+    -boolean requiereConexionElectrica
     +calcularCanon() float
 }
 
 class PuestoDesarmable {
     -int cantidadCarpas
-    -int tiempoEnMinutos
+    -int tiempoMontajeMinutos
     +calcularCanon() float
 }
 
@@ -74,18 +74,18 @@ class Personal {
     -LocalDate fechaIngreso
     +esMayorDeEdad() boolean
     +calcularAntiguedad() int
-    +liquidarHaberes() float*
+    +calcularSueldo(double sueldoBase) double
 }
 
 class Cocinero {
-    -String especialidadCulinaria
-    -String categoria
-    +liquidarHaberes() float
+    -String especialidad
+    -double plusCategoria
+    +calcularSueldo(double sueldoBase) double
 }
 
 class Cajero {
     -String turno
-    +liquidarHaberes() float
+    +calcularSueldo(double sueldoBase) double
 }
 
 class Plato {

@@ -12,8 +12,8 @@ public class Cajero extends Personal {
     }
 
     @Override
-    public double calcularSueldo() {
-        return SUELDO_BASE + calcularAntiguedad() * VALOR_ANIO_ANTIGUEDAD;
+    public double calcularSueldo(double sueldoBase) {
+        return sueldoBase + calcularAntiguedad() * VALOR_ANIO_ANTIGUEDAD;
     }
 
     public String getTurno() {

@@ -14,8 +14,8 @@ public class Cocinero extends Personal {
     }
 
     @Override
-    public double calcularSueldo() {
-        return SUELDO_BASE + plusCategoria;
+    public double calcularSueldo(double sueldoBase) {
+        return sueldoBase + plusCategoria;
     }
 
     public String getEspecialidad() {
