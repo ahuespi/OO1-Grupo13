@@ -372,6 +372,50 @@ public class Sistema {
     public Plato platoEstrella(UnidadDeVenta unidad, Festival festival) throws Exception {
         return platoEstrella(festival, unidad);
     }
+
+    // =========================================================
+    // CASO DE USO 12: AUDITORÍA DE PERSONAL DEL FESTIVAL
+    // =========================================================
+    public List<Personal> auditoriaPersonalFestival(Festival festival) throws Exception {
+        if (festival == null || !lstFestivales.contains(festival)) {
+            throw new Exception("Error: el festival no existe en el sistema.");
+        }
+
+        List<Personal> personalTrabajo = new ArrayList<>();
+
+        // 1. Buscar personal de unidades que tienen pedidos en este festival
+        for (Pedido p : lstPedidos) {
+            if (p.getFestival().equals(festival)) {
+                UnidadDeVenta unidad = p.getUnidad();
+                agregarPersonalDeUnidad(personalTrabajo, unidad);
+            }
+        }
+
+        // 2. Buscar personal de unidades asociadas directamente al festival (si las hay)
+        if (festival.getUnidades() != null) {
+            for (UnidadDeVenta unidad : festival.getUnidades()) {
+                agregarPersonalDeUnidad(personalTrabajo, unidad);
+            }
+        }
+
+        return personalTrabajo;
+    }
+
+    private void agregarPersonalDeUnidad(List<Personal> lista, UnidadDeVenta unidad) {
+        if (unidad != null) {
+            Personal resp = unidad.getResponsable();
+            if (resp != null && !lista.contains(resp)) {
+                lista.add(resp);
+            }
+            if (unidad.getLstPersonal() != null) {
+                for (Personal staff : unidad.getLstPersonal()) {
+                    if (staff != null && !lista.contains(staff)) {
+                        lista.add(staff);
+                    }
+                }
+            }
+        }
+    }
     
     // =========================================================
     // GETTERS Y SETTERS

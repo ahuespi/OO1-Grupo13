@@ -445,6 +445,49 @@ public class MainTest {
         }
 
         System.out.println("\n=========================================================");
+        System.out.println("CASO DE USO 12: AUDITORÍA DE PERSONAL DEL FESTIVAL");
+        System.out.println("=========================================================");
+        try {
+            System.out.println("--- 12.1 PERSONAL DEL FESTIVAL VERANO 2025 ---");
+            Festival festivalVerano = sistema.traerFestival("Festival Verano 2025");
+            List<Personal> personalVerano = sistema.auditoriaPersonalFestival(festivalVerano);
+            System.out.println("Personal que trabajó:");
+            for (Personal p : personalVerano) {
+                System.out.println("- " + p.getNombre() + " " + p.getApellido() + " (DNI: " + p.getDni() + ")");
+            }
+
+            System.out.println("\n--- 12.2 PERSONAL DEL FESTIVAL PRIMAVERA 2025 ---");
+            Festival festivalPrimavera = sistema.traerFestival("Festival Primavera 2025");
+            // Agreguemos otro miembro del personal a la unidad FT99999999 para probar múltiples trabajadores
+            Personal martin = sistema.traerPersonal(33111222); // Martin Perez
+            if (martin != null) {
+                sistema.traerUnidad("FT99999999").agregarPersonal(martin);
+            }
+            List<Personal> personalPrimavera = sistema.auditoriaPersonalFestival(festivalPrimavera);
+            System.out.println("Personal que trabajó:");
+            for (Personal p : personalPrimavera) {
+                System.out.println("- " + p.getNombre() + " " + p.getApellido() + " (DNI: " + p.getDni() + ")");
+            }
+
+            System.out.println("\n--- 12.3 CASOS DE ERROR (VALIDACIONES) ---");
+            try {
+                sistema.auditoriaPersonalFestival(null);
+            } catch (Exception e) {
+                System.out.println("Error esperado (festival null): " + e.getMessage());
+            }
+
+            try {
+                Festival festivalInexistente = new Festival(99, "Inexistente", "Otoño", new Date(), new Date(), 0, 0, 0, 0);
+                sistema.auditoriaPersonalFestival(festivalInexistente);
+            } catch (Exception e) {
+                System.out.println("Error esperado (festival inexistente): " + e.getMessage());
+            }
+        } catch (Exception e) {
+            System.err.println("Error inesperado en CU 12: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("\n=========================================================");
         System.out.println("EXTRAS: ESTADO FINAL DEL SISTEMA Y FILTRADO");
         System.out.println("=========================================================");
 
